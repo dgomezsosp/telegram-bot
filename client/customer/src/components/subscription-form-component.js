@@ -1,5 +1,4 @@
 class SubscriptionForm extends HTMLElement {
-
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
@@ -11,20 +10,20 @@ class SubscriptionForm extends HTMLElement {
     await this.render()
   }
 
-  loadData(){
+  loadData () {
     this.data = {
-      explanationTitle: "Este es un título muy chulo",
-      explanationInfo: "esta es una descripción ultra super mega guay chula chiripitiflautica",
-      explanationFeatured: "Subscríbete perro",
-      infoAreaTitle: "Empieza a usarlo ya",
-      infoAreaSubtitle: "Te enviaremos un correo electrónico con las instrucciones para que puedas empezar a estafar a gente.",
-      formElementButton: "Pa lante",
+      explanationTitle: 'Este es un título muy chulo',
+      explanationInfo: 'esta es una descripción ultra super mega guay chula chiripitiflautica',
+      explanationFeatured: 'Subscríbete perro',
+      infoAreaTitle: 'Empieza a usarlo ya',
+      infoAreaSubtitle: 'Te enviaremos un correo electrónico con las instrucciones para que puedas empezar a estafar a gente.',
+      formElementButton: 'Pa lante',
     }
   }
-  
+
   render () {
     this.shadow.innerHTML =
-    /*html*/`
+    /* html */`
     <style>
 
 
@@ -283,10 +282,7 @@ class SubscriptionForm extends HTMLElement {
   </section>
     
     `
-
-
-
   }
 }
 
-customElements.define('subscription-form-component', SubscriptionForm);
+customElements.define('subscription-form-component', SubscriptionForm)

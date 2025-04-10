@@ -1,32 +1,31 @@
 class FeaturesTitles extends HTMLElement {
-
-  constructor() {
+  constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
   }
 
-  async connectedCallback() {
+  async connectedCallback () {
     await this.loadData()
     await this.render()
   }
 
-  loadData() {
+  loadData () {
     this.data = [
       {
-        title: "Filtra",
+        title: 'Filtra',
       },
       {
-        title: "Automatiza",
+        title: 'Automatiza',
       },
       {
-        title: "Ahorra",
+        title: 'Ahorra',
       }
     ]
   }
 
-  render() {
+  render () {
     this.shadow.innerHTML =
-    /*html*/`
+    /* html */`
     <style>
 
       *{
@@ -136,27 +135,18 @@ class FeaturesTitles extends HTMLElement {
     
     `
 
-
-   
-
-
     this.data.forEach((element, index) => {
-
       const ulContainer = this.shadow.querySelector('ul')
       const liContainer = document.createElement('li')
 
       liContainer.style.setProperty('--index', index)
-      //tmb se puede hacer así
+      // tmb se puede hacer así
       // liContainer.style = `--index: ${index}`
 
       liContainer.textContent = element.title
       ulContainer.appendChild(liContainer)
-
     })
-
-
-
   }
 }
 
-customElements.define('features-titles-component', FeaturesTitles);
+customElements.define('features-titles-component', FeaturesTitles)

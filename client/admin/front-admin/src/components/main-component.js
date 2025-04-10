@@ -1,5 +1,4 @@
 class Main extends HTMLElement {
-
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
@@ -8,12 +7,10 @@ class Main extends HTMLElement {
   connectedCallback () {
     this.render()
   }
-  
-  
-  
+
   render () {
     this.shadow.innerHTML =
-    /*html*/`
+    /* html */`
     <style>
 
       * {
@@ -39,4 +36,4 @@ class Main extends HTMLElement {
   }
 }
 
-customElements.define('main-component', Main);
+customElements.define('main-component', Main)

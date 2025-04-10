@@ -1,5 +1,4 @@
 class Menu extends HTMLElement {
-
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
@@ -9,11 +8,9 @@ class Menu extends HTMLElement {
     this.render()
   }
 
-  
-  
   render () {
     this.shadow.innerHTML =
-    /*html*/`
+    /* html */`
     <style>
 
 
@@ -59,8 +56,7 @@ class Menu extends HTMLElement {
     </div>
   
     `
-
   }
 }
 
-customElements.define('menu-component', Menu);
+customElements.define('menu-component', Menu)

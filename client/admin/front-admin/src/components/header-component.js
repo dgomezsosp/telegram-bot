@@ -1,5 +1,4 @@
 class Header extends HTMLElement {
-
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
@@ -8,12 +7,10 @@ class Header extends HTMLElement {
   connectedCallback () {
     this.render()
   }
-  
-  
-  
+
   render () {
     this.shadow.innerHTML =
-    /*html*/`
+    /* html */`
     <style>
 
       * {
@@ -37,4 +34,4 @@ class Header extends HTMLElement {
   }
 }
 
-customElements.define('header-component', Header);
+customElements.define('header-component', Header)

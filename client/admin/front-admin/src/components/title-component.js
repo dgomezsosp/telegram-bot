@@ -1,5 +1,4 @@
 class Title extends HTMLElement {
-
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
@@ -9,11 +8,9 @@ class Title extends HTMLElement {
     this.render()
   }
 
-  
-  
   render () {
     this.shadow.innerHTML =
-    /*html*/`
+    /* html */`
     <style>
 
       * {
@@ -63,8 +60,7 @@ class Title extends HTMLElement {
     </div>
     
     `
-    
   }
 }
 
-customElements.define('title-component', Title);
+customElements.define('title-component', Title)

@@ -1,6 +1,5 @@
 class Cards extends HTMLElement {
-
-  constructor() {
+  constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
   }
@@ -10,7 +9,7 @@ class Cards extends HTMLElement {
     await this.render()
   }
 
-  loadData(){
+  loadData () {
     this.data = {
       title: 'Fácil de usaar',
       description: 'Tan simple como decir qué productos buscas, las características que te interesan y cuanto estás dispuesto a pagas. Nuestro bot se encargará de buscarlo por ti y te notificará cuando encuentre algo que se ajuste a tus preferencias.',
@@ -55,11 +54,10 @@ class Cards extends HTMLElement {
     }
   }
 
-  render() {
+  render () {
     this.shadow.innerHTML =
-    /*html*/`
-    <style>
-
+    /* html */
+    `<style>
       *{
         box-sizing: border-box;
       }
@@ -283,7 +281,7 @@ class Cards extends HTMLElement {
     this.data.cards.forEach(element => {
       const cardListContainer = this.shadow.querySelector('.cards-list')
       const cardContainer = document.createElement('div')
-      cardContainer.classList.add("card", element.color)
+      cardContainer.classList.add('card', element.color)
       cardListContainer.appendChild(cardContainer)
 
       const cardTitleContent = document.createElement('div')
@@ -301,35 +299,32 @@ class Cards extends HTMLElement {
       const picture = document.createElement('picture')
       cardImageContent.appendChild(picture)
 
-
       const sourceLg = document.createElement('source')
       sourceLg.srcset = element.images.lg
-      sourceLg.media = "(min-width: 1920px)"
+      sourceLg.media = '(min-width: 1920px)'
       picture.appendChild(sourceLg)
 
       const sourceMd = document.createElement('source')
       sourceMd.srcset = element.images.md
-      sourceMd.media = "(min-width: 1024px)"
+      sourceMd.media = '(min-width: 1024px)'
       picture.appendChild(sourceMd)
 
       const sourceSm = document.createElement('source')
       sourceSm.srcset = element.images.sm
-      sourceSm.media = "(min-width: 768px)"
+      sourceSm.media = '(min-width: 768px)'
       picture.appendChild(sourceSm)
 
       const sourceXs = document.createElement('source')
       sourceXs.srcset = element.images.xs
-      sourceXs.media = "(min-width: 480px)"
+      sourceXs.media = '(min-width: 480px)'
       picture.appendChild(sourceXs)
 
       const img = document.createElement('img')
       img.src = element.images.xs
-      img.alt = "Imagen de prueba Picsum"
+      img.alt = 'Imagen de prueba Picsum'
       picture.appendChild(img)
-
-
     })
   }
 }
 
-customElements.define('cards-component', Cards);
+customElements.define('cards-component', Cards)

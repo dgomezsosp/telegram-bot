@@ -1,5 +1,4 @@
 class Table extends HTMLElement {
-
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
@@ -10,14 +9,14 @@ class Table extends HTMLElement {
     this.render()
   }
 
-  loadData(){
+  loadData () {
     this.data = [
       {
         name: 'David',
         email: 'dgomez@gmail.com',
         createdAt: '2024-04-22',
         updatedAt: '2024-04-22'
-      }, 
+      },
       {
         name: 'Carlos',
         email: 'carlossedagambin@gmail.com',
@@ -26,12 +25,10 @@ class Table extends HTMLElement {
       }
     ]
   }
-  
-  
-  
+
   render () {
     this.shadow.innerHTML =
-    /*html*/`
+    /* html */`
     <style>
 
       * {
@@ -194,7 +191,6 @@ class Table extends HTMLElement {
     `
 
     this.data.forEach(element => {
-
       const tableBody = this.shadow.querySelector('.table__body')
       const userBox = document.createElement('div')
       userBox.classList.add('.table__body__user-box')
@@ -219,7 +215,7 @@ class Table extends HTMLElement {
                 <title>delete</title>
                 <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
               </svg>`
-      
+
       const data = document.createElement('div')
       data.classList.add('user-box__data')
       userBox.appendChild(data)
@@ -242,10 +238,8 @@ class Table extends HTMLElement {
       const uptatedAt = document.createElement('li')
       ul.appendChild(uptatedAt)
       uptatedAt.textContent = `Fecha de actualización: ${element.updatedAt}`
-
-
     })
   }
 }
 
-customElements.define('table-component', Table);
+customElements.define('table-component', Table)

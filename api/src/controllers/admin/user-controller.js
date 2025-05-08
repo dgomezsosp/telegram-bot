@@ -35,7 +35,7 @@ exports.findAll = async (req, res, next) => {
     const result = await User.findAndCountAll({
       where: condition,
       attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt'],
-      limit,
+      limit, // Es lo mismo que escribir limit: limit
       offset,
       order: [['createdAt', 'DESC']]
     })
@@ -59,7 +59,8 @@ exports.findOne = async (req, res, next) => {
     const data = await User.findByPk(id)
 
     if (!data) {
-      const err = new Error(`No se puede encontrar el elemento con la id=${id}.`)
+      const err = new Error()
+      err.message = `No se puede encontrar el elemento con la id=${id}.`
       err.statusCode = 404
       throw err
     }
@@ -76,7 +77,8 @@ exports.update = async (req, res, next) => {
     const [numberRowsAffected] = await User.update(req.body, { where: { id } })
 
     if (numberRowsAffected !== 1) {
-      const err = new Error(`No se puede actualizar el elemento con la id=${id}. Tal vez no se ha encontrado o el cuerpo de la petición está vacío.`)
+      const err = new Error()
+      err.message = `No se puede actualizar el elemento con la id=${id}. Tal vez no se ha encontrado.`
       err.statusCode = 404
       throw err
     }
@@ -85,6 +87,10 @@ exports.update = async (req, res, next) => {
       message: 'El elemento ha sido actualizado correctamente.'
     })
   } catch (err) {
+    if (err.name === 'SequelizeValidationError') {
+      err.statusCode = 422
+    }
+
     next(err)
   }
 }
@@ -95,7 +101,8 @@ exports.delete = async (req, res, next) => {
     const numberRowsAffected = await User.destroy({ where: { id } })
 
     if (numberRowsAffected !== 1) {
-      const err = new Error(`No se puede borrar el elemento con la id=${id}. Tal vez no se ha encontrado.`)
+      const err = new Error()
+      err.message = `No se puede actualizar el elemento con la id=${id}. Tal vez no se ha encontrado.`
       err.statusCode = 404
       throw err
     }

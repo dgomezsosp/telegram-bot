@@ -13,11 +13,17 @@ class Form extends HTMLElement {
     /* html */`
     <style>
 
-      * {
-        margin: 0;
-        padding: 0;
+      *{
         box-sizing: border-box;
-        font-family: "Montserrat", sans-serif;
+      }
+
+      h1, h2, h3, h4, h5, h6, p{
+        margin: 0;
+      }
+
+      h1, h2, h3, h4, h5, h6, p, a, span, li, label, input, button{
+        font-family: "Nunito Sans", serif;
+        font-optical-sizing: auto;
       }
 
       button{
@@ -33,8 +39,8 @@ class Form extends HTMLElement {
       }
 
       h1, h2, h3, h4, h5, h6, p, a, span, li, label, input, button{
+        font-family: "Nunito Sans", serif;
         font-optical-sizing: auto;
-
       }
 
       img{
@@ -50,18 +56,11 @@ class Form extends HTMLElement {
 
 
 
-      .form {
-        display:flex;
-        flex-direction: column;
-        gap: 10px;
-        border-radius: 10px;
-      }
 
-      .form__body{
+      form{
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        padding: 10px 0;
-        gap: 10px;
+        grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
+        gap:1rem;
       }
       /* Encabezado del formulario */
       .form__header {
@@ -72,10 +71,11 @@ class Form extends HTMLElement {
         display: flex;
         justify-content: space-between; /* Alinea los elementos a los extremos */
         align-items: center;
+        background: hsl(198, 100%, 85%)
       }
 
       .form__header-box-filter {
-        background: hsl(229, 66%, 30%);
+        background: hsl(200, 77%, 42%);
         padding: 5px 10px;
         color: white; /* Asegura que el texto sea visible */
         height: 30px;
@@ -124,8 +124,8 @@ class Form extends HTMLElement {
         border-radius: 5px;
         box-sizing: border-box;
         border: none;
-        background: hsl(229, 66%, 80%);
-        color: white;
+        background: white;
+        color: black;
       }
 
 
@@ -163,17 +163,15 @@ class Form extends HTMLElement {
               <span>Nombre</span>
             </div>
             <div class="form-element-input">
-              <input type="text" placeholder="">
+              <input type="text" placeholder="" name="name">
             </div>
           </div>
-        </form>
-        <form>
           <div class="form-element">
             <div class="form-title">
               <span>Email</span>
             </div>
             <div class="form-element-input">
-              <input type="email" placeholder="">
+              <input type="email" placeholder="" name="email">
             </div>
           </div>
         </form>
@@ -181,6 +179,47 @@ class Form extends HTMLElement {
     </section>
     
     `
+    // Se llama a la función para el botón de guardar
+    this.renderSaveButton()
+  }
+
+  renderSaveButton () {
+    const SaveButton = this.shadow.querySelector('.save-icon')
+
+    // async porque se hace un await para una llamada fetch
+    SaveButton.addEventListener('click', async event => {
+      // Prevenir que no se pasen los datos de los campo a través de la url.
+      event.preventDefault()
+
+      const form = this.shadow.querySelector('form')
+      // Coge todos los valores de los inputs del formulario y te los prepara.
+      const formData = new FormData(form)
+      const formDataJson = {}
+
+      for (const [key, value] of formData.entries()) {
+        formDataJson[key] = value !== '' ? value : null
+      }
+      try {
+        const method = 'POST'
+
+        const response = await fetch('/api/admin/users', {
+          method,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formDataJson)
+        })
+
+        if (!response.ok) {
+          throw new Error(`Error al guardar los datos: ${response.statusText}`)
+        }
+
+        const data = await response.json()
+        console.log('hola')
+      } catch (error) {
+        console.error('Error al guardar los datos:', error)
+      }
+    })
   }
 }
 

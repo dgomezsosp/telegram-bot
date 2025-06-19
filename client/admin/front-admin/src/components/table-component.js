@@ -4,26 +4,26 @@ class Table extends HTMLElement {
     this.shadow = this.attachShadow({ mode: 'open' })
   }
 
-  connectedCallback () {
-    this.loadData()
-    this.render()
+  async connectedCallback () {
+    await this.loadData()
+    await this.render()
   }
 
-  loadData () {
-    this.data = [
-      {
-        name: 'David',
-        email: 'dgomez@gmail.com',
-        createdAt: '2024-04-22',
-        updatedAt: '2024-04-22'
-      },
-      {
-        name: 'Carlos',
-        email: 'carlossedagambin@gmail.com',
-        createdAt: '2024-04-22',
-        updatedAt: '2024-04-22'
+  async loadData () {
+    try {
+      const response = await fetch('/api/admin/users')
+
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`)
       }
-    ]
+
+      this.data = await response.json()
+
+      console.log(this.data)
+    } catch (error) {
+      console.error('Error loading data:', error)
+      this.data = []
+    }
   }
 
   render () {
@@ -31,12 +31,17 @@ class Table extends HTMLElement {
     /* html */`
     <style>
 
-      * {
+      *{
         box-sizing: border-box;
       }
 
-        h1, h2, h3, h4, h5, h6, p{
+      h1, h2, h3, h4, h5, h6, p{
         margin: 0;
+      }
+
+      h1, h2, h3, h4, h5, h6, p, a, span, li, label, input, button{
+        font-family: "Nunito Sans", serif;
+        font-optical-sizing: auto;
       }
 
       ul{
@@ -46,7 +51,6 @@ class Table extends HTMLElement {
       }
 
       li{
-        font-family: "Montserrat", sans-serif;
       }
 
       button{
@@ -69,15 +73,15 @@ class Table extends HTMLElement {
       .table__header {
         display: flex;
         justify-content: flex-start; /* Icono alineado a la izquierda */
-        background-color: white;
+        background-color: hsl(198, 100%, 85%);
         height: 30px;
       }
 
-      .table__header__icon{
+      .table__header-icon{
         margin-left: 5px;
       }
 
-      .table__header__icon ,
+      .table__header-icon ,
       .edit-icon ,
       .delete-icon ,
       .clean-icon,
@@ -94,20 +98,19 @@ class Table extends HTMLElement {
         gap: 10px;      
         width: 90%;
         margin: 0 auto;
-        margin-bottom: 200px;
         margin-top: 25px;
       }
 
 
 
       .table__body__user-box {
-        background: black;
         color: white;
+
       }
 
       .user-box__data {
         padding: 15px;
-        background-color: black;
+        background-color: hsl(200, 77%, 32%);
       }
 
 
@@ -121,7 +124,8 @@ class Table extends HTMLElement {
         justify-content: flex-end;
         align-items: center;
         gap: 10px;
-        background-color: white;
+        background-color: hsl(198, 100%, 85%);
+        border-radius: 10px 10px 0 0;
       }
 
 
@@ -132,7 +136,7 @@ class Table extends HTMLElement {
         justify-content: space-between;
         align-items: center;
         padding: 5px 10px;
-        background-color: rgb(255, 255, 255);
+        background-color: hsl(198, 100%, 85%);
       }
 
       .table__footer-box {
@@ -145,7 +149,6 @@ class Table extends HTMLElement {
       .table-page-info {
         text-align: left;
         color: rgb(0, 0, 0);
-        font-family: "Montserrat", sans-serif;
 
       }
 
@@ -163,8 +166,8 @@ class Table extends HTMLElement {
 
     <section class="table">
       <div class="table__header">
-        <div class="table__header__box">
-          <button class="table__header__icon">
+        <div class="table__header-box">
+          <button class="table__header-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <title>filter-check</title>
               <path
@@ -190,7 +193,7 @@ class Table extends HTMLElement {
     
     `
 
-    this.data.forEach(element => {
+    this.data.rows.forEach(element => {
       const tableBody = this.shadow.querySelector('.table__body')
       const userBox = document.createElement('div')
       userBox.classList.add('.table__body__user-box')
@@ -202,6 +205,7 @@ class Table extends HTMLElement {
 
       const editIcon = document.createElement('button')
       editIcon.classList.add('edit-icon')
+      editIcon.dataset.id = element.id
       upperRow.appendChild(editIcon)
       editIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <title>pencil</title>
@@ -210,6 +214,7 @@ class Table extends HTMLElement {
               </svg>`
       const deleteIcon = document.createElement('button')
       deleteIcon.classList.add('delete-icon')
+      deleteIcon.dataset.id = element.id
       upperRow.appendChild(deleteIcon)
       deleteIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <title>delete</title>

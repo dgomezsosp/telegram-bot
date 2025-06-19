@@ -27,16 +27,16 @@ class NotFound extends HTMLElement {
         *{
           box-sizing: border-box;
         }
-  
+
         h1, h2, h3, h4, h5, h6, p{
           margin: 0;
         }
-  
+
         h1, h2, h3, h4, h5, h6, p, a, span, li, label, input, button{
           font-family: "Nunito Sans", serif;
           font-optical-sizing: auto;
         }
-  
+
         button{
           background-color: transparent;
           border: none;
@@ -44,7 +44,7 @@ class NotFound extends HTMLElement {
           outline: none;
           padding: 0;
         }
-  
+    
         .wrapper {
           min-height: 100vh;
           display: flex;
@@ -85,13 +85,13 @@ class NotFound extends HTMLElement {
           margin-bottom: 2rem;
           opacity: 0.9;
           line-height: 1.6;
-          color:hsl(0, 0%, 50%);
+          color:hsl(0, 0.00%, 100.00%);
         }
   
         .btn-home {
           display: inline-block;
           padding: 1rem 2rem;
-          background: hsl(200, 77%, 52%);
+          background: hsl(229, 66%, 30%);
           text-decoration: none;
           border-radius: 50px;
           font-size: 2rem;

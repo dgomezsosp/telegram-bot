@@ -17,7 +17,7 @@ class Title extends HTMLElement {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Montserrat", sans-serif;
+       
       }
 
       button{
@@ -33,8 +33,8 @@ class Title extends HTMLElement {
       }
 
       h1, h2, h3, h4, h5, h6, p, a, span, li, label, input, button{
+        font-family: "Nunito Sans", serif;
         font-optical-sizing: auto;
-
       }
 
       img{
@@ -56,7 +56,7 @@ class Title extends HTMLElement {
     </style>
 
     <div class="header__title">
-      <h2>Pedidoss</h2>
+      <h2>Panel de administración guay</h2>
     </div>
     
     `

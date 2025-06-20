@@ -47,12 +47,14 @@ class Table extends HTMLElement {
       }
 
       ul{
-        list-style-type: none;
+        list-style-type: disc;
         margin: 0;
         padding: 0;
+        padding-left: 1.5rem;
       }
 
       li{
+        margin-top: 0;
       }
 
       button{
@@ -95,6 +97,14 @@ class Table extends HTMLElement {
         fill: black;
       }
 
+      .table__header-icon svg:hover,
+      .edit-icon svg:hover,
+      .delete-icon svg:hover,
+      .table-page-logo{
+       
+        fill: hsl(0 , 0% , 25%);
+      }
+
       .table__body {
         display: flex;
         flex-direction: column;
@@ -106,6 +116,24 @@ class Table extends HTMLElement {
         padding-right: 1rem;
       }
 
+      .table__body::-webkit-scrollbar {
+        width: 8px; /* ancho del scrollbar */
+      }
+
+      .table__body::-webkit-scrollbar-track {
+        background: #e0e0e0; /* color del fondo de la barra */
+        border-radius: 10px;
+      }
+
+      .table__body::-webkit-scrollbar-thumb {
+        background: hsl(200, 77%, 42%); /* color azul del "pulgar" */
+        border-radius: 10px;
+      }
+
+      .table__body::-webkit-scrollbar-thumb:hover {
+        background: hsl(200, 77%, 32%); /* más oscuro al hacer hover */
+      }
+
 
 
       .table__body__user-box {
@@ -115,14 +143,8 @@ class Table extends HTMLElement {
 
       .user-box__data {
         padding: 15px;
-        background-color: hsl(200, 77%, 32%);
+        background-color: hsl(200, 77%, 36%);
         border-radius: 0 0 10px 10px;
-      }
-
-
-
-      .user-box__data li {
-        margin-top: 5px; 
       }
 
       .user-box__upper-row {
@@ -236,20 +258,55 @@ class Table extends HTMLElement {
       data.appendChild(ul)
 
       const name = document.createElement('li')
+      const nameLabel = document.createElement('span')
+      nameLabel.textContent = 'Nombre: '
+      nameLabel.style.fontWeight = 'bold'
+      name.appendChild(nameLabel)
+      name.append(` ${element.name}`)
       ul.appendChild(name)
-      name.textContent = `Nombre: ${element.name}`
 
       const email = document.createElement('li')
+      const emailLabel = document.createElement('span')
+      emailLabel.textContent = 'Email: '
+      emailLabel.style.fontWeight = 'bold'
+      email.appendChild(emailLabel)
+      email.append(` ${element.email}`)
       ul.appendChild(email)
-      email.textContent = `Email: ${element.email}`
 
       const createdAt = document.createElement('li')
+      const createdAtLabel = document.createElement('span')
+      createdAtLabel.textContent = 'Fecha de creación: '
+      createdAtLabel.style.fontWeight = 'bold'
+      createdAt.appendChild(createdAtLabel)
+      createdAt.append(` ${element.createdAt}`)
       ul.appendChild(createdAt)
-      createdAt.textContent = `Fecha de creación: ${element.createdAt}`
 
-      const uptatedAt = document.createElement('li')
-      ul.appendChild(uptatedAt)
-      uptatedAt.textContent = `Fecha de actualización: ${element.updatedAt}`
+      const updatedAt = document.createElement('li')
+      const updatedAtLabel = document.createElement('span')
+      updatedAtLabel.textContent = 'Fecha de actualización: '
+      updatedAtLabel.style.fontWeight = 'bold'
+      updatedAt.appendChild(updatedAtLabel)
+      updatedAt.append(` ${element.updatedAt}`)
+      ul.appendChild(updatedAt)
+    })
+
+    this.renderButtons()
+  }
+
+  renderButtons () {
+    this.shadow.querySelector('.table').addEventListener('click', event => {
+      if (event.target.closest('.edit-icon')) {
+        const element = event.target.closest('.edit-icon')
+        const id = element.dataset.id
+      }
+
+      if (event.target.closest('.delete-icon')) {
+        const element = event.target.closest('.delete-icon')
+        const id = element.dataset.id
+        document.dispatchEvent(new CustomEvent('delete-modal', {
+        }))
+        console.log('Envío el evento de click de botón delete')
+      }
     })
   }
 }

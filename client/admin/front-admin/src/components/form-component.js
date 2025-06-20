@@ -77,23 +77,49 @@ class Form extends HTMLElement {
 
       }
 
+      /* Opción 1: Estilo con flecha dropdown */
       .form__header-box-filter {
         background: hsl(200, 77%, 42%);
-        padding: 5px 10px;
-        color: white; /* Asegura que el texto sea visible */
+        padding: 5px 15px;
+        color: white;
         height: 30px;
-        border-radius: 5px 0 0 5px;
+        border-radius: 5px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
 
+      .form__header-box-filter:hover {
+        background: hsl(200, 77%, 35%);
       }
 
       .form__header-box-filter button {
-        color: white; /* Asegura que el texto sea visible */
+        color: white;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+      }
+
+      .form__header-box-filter button::after {
+        content: '';
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid white;
+        margin-left: 5px;
+      }
+
+      .form__header-box-filter button {
+        color: white; 
         font-size: 16px;
       }
 
       .form__header-icons {
         display: flex;
-        gap: 10px; /* Espacio entre los iconos */
+        gap: 10px; 
         margin-right: 5px;
       }
 
@@ -106,6 +132,16 @@ class Form extends HTMLElement {
         height: 30px;
         fill: black;
       }
+
+      .table__header__icon svg:hover,
+      .edit-icon svg:hover,
+      .delete-icon svg:hover,
+      .clean-icon:hover,
+      .save-icon:hover {
+       
+        fill: hsl(0 , 0% , 25%);
+      }
+
 
 
       /* Ajustar cada elemento del formulario */
@@ -121,6 +157,10 @@ class Form extends HTMLElement {
       /* Campos de entrada */
       .form-element {
         margin: 10px 0;
+      }
+
+      .form-title{
+        border-bottom: solid 1px;
       }
 
       .form-element-input input {
@@ -165,18 +205,18 @@ class Form extends HTMLElement {
         <form>
           <div class="form-element">
             <div class="form-title">
-              <span>Nombre</span>
+              <span>Nombre:</span>
             </div>
             <div class="form-element-input">
-              <input type="text" placeholder="" name="name">
+              <input type="text" placeholder="Nombre" name="name">
             </div>
           </div>
           <div class="form-element">
             <div class="form-title">
-              <span>Email</span>
+              <span>Email:</span>
             </div>
             <div class="form-element-input">
-              <input type="email" placeholder="" name="email">
+              <input type="email" placeholder="Email" name="email">
             </div>
           </div>
         </form>
@@ -234,7 +274,6 @@ class Form extends HTMLElement {
             type: 'error'
           }
         }))
-
         console.error('Error al guardar los datos:', error)
       }
     })

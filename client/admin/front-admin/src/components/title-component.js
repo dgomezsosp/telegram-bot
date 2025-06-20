@@ -56,7 +56,7 @@ class Title extends HTMLElement {
     </style>
 
     <div class="header__title">
-      <h2>Panel de administración guay</h2>
+      <h2>PANEL DE ADMINISTRACIÓN guay</h2>
     </div>
     
     `

@@ -2,10 +2,17 @@ class DeleteModal extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
+
+    document.addEventListener('delete-modal', this.handleMessage.bind(this))
   }
 
   connectedCallback () {
     this.render()
+  }
+
+  handleMessage (event) {
+    this.shadow.querySelector('.modal-overlay').classList.add('active')
+    console.log('Modal activado por evento')
   }
 
   render () {
@@ -68,8 +75,8 @@ class DeleteModal extends HTMLElement {
   
         .close-button {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 5px;
+            right: 5px;
             width: 24px;
             height: 24px;
             cursor: pointer;
@@ -96,6 +103,10 @@ class DeleteModal extends HTMLElement {
         .modal-content h2 {
             margin-bottom: 20px;
             padding-right: 30px; /* Espacio para el botón de cerrar */
+        }
+        
+        .modal-text{
+          padding: 0.5rem;
         }
   
         .modal-buttons {
@@ -133,14 +144,16 @@ class DeleteModal extends HTMLElement {
      
       </style>
   
-      <div class="modal-overlay active">
+      <div class="modal-overlay">
         <div class="modal-content">
           <button class="close-button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M19,3H16.3H7.7H5A2,2 0 0,0 3,5V7.7V16.4V19A2,2 0 0,0 5,21H7.7H16.4H19A2,2 0 0,0 21,19V16.3V7.7V5A2,2 0 0,0 19,3M15.6,17L12,13.4L8.4,17L7,15.6L10.6,12L7,8.4L8.4,7L12,10.6L15.6,7L17,8.4L13.4,12L17,15.6L15.6,17Z" />
             </svg>
           </button>
-          <h2>¿Estás seguro de eliminar el registro?</h2>
+          <div class="modal-text">
+            <span>¿Estás seguro de eliminar el registro?</span>
+          </div>
           <div class="modal-buttons">
             <button class="btn-confirm" >Sí</button>
             <button class="btn-cancel" >No</button>
@@ -165,6 +178,10 @@ class DeleteModal extends HTMLElement {
       if (event.target.closest('.close-button')) {
         this.shadow.querySelector('.modal-overlay').classList.remove('active')
       }
+      if (event.target.classList.contains('modal-overlay')) {
+        this.shadow.querySelector('.modal-overlay').classList.remove('active')
+      }
+      console.log(event.target)
     })
   }
 }

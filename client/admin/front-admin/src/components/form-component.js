@@ -64,14 +64,17 @@ class Form extends HTMLElement {
       }
       /* Encabezado del formulario */
       .form__header {
-        background-color: rgb(255, 255, 255);
+
+        
       }
 
       .form__header-box{
         display: flex;
         justify-content: space-between; /* Alinea los elementos a los extremos */
         align-items: center;
-        background: hsl(198, 100%, 85%)
+        background: hsl(198, 100%, 85%);
+        border-radius: 5px;
+
       }
 
       .form__header-box-filter {
@@ -79,6 +82,8 @@ class Form extends HTMLElement {
         padding: 5px 10px;
         color: white; /* Asegura que el texto sea visible */
         height: 30px;
+        border-radius: 5px 0 0 5px;
+
       }
 
       .form__header-box-filter button {
@@ -215,8 +220,21 @@ class Form extends HTMLElement {
         }
 
         // const data = await response.json()
-        console.log('hola')
+
+        document.dispatchEvent(new CustomEvent('notice', {
+          detail: {
+            message: 'Datos guardados correctamente',
+            type: 'success'
+          }
+        }))
       } catch (error) {
+        document.dispatchEvent(new CustomEvent('notice', {
+          detail: {
+            message: 'No se han podido guardar los datos',
+            type: 'error'
+          }
+        }))
+
         console.error('Error al guardar los datos:', error)
       }
     })

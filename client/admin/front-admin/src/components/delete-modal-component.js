@@ -16,16 +16,16 @@ class DeleteModal extends HTMLElement {
         *{
           box-sizing: border-box;
         }
-
+  
         h1, h2, h3, h4, h5, h6, p{
           margin: 0;
         }
-
+  
         h1, h2, h3, h4, h5, h6, p, a, span, li, label, input, button{
           font-family: "Nunito Sans", serif;
           font-optical-sizing: auto;
         }
-
+  
         button{
           background-color: transparent;
           border: none;
@@ -33,7 +33,7 @@ class DeleteModal extends HTMLElement {
           outline: none;
           padding: 0;
         }
-
+  
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -44,9 +44,17 @@ class DeleteModal extends HTMLElement {
             display: flex;
             align-items: center;
             justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
             z-index: 1000; /* Asegura que esté por encima del resto */
         }
 
+        .modal-overlay.active{
+          opacity: 1;
+          visibility: visible;
+        }
+  
         .modal-content {
             background: white;
             padding: 20px 30px;
@@ -55,57 +63,109 @@ class DeleteModal extends HTMLElement {
             max-width: 400px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             color: black;
+            position: relative;
         }
-
+  
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            padding: 2px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+  
+        .close-button:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+  
+        .close-button svg {
+            width: 100%;
+            height: 100%;
+            fill: hsl(200, 77%, 22%);
+            transition: fill 0.2s ease;
+        }
+  
+        .close-button:hover svg {
+            fill: hsl(200, 77%, 32%);
+        }
+  
         .modal-content h2 {
             margin-bottom: 20px;
+            padding-right: 30px; /* Espacio para el botón de cerrar */
         }
-
+  
         .modal-buttons {
             display: flex;
             justify-content: space-around;
             margin-top: 20px;
         }
-
+  
         .modal-buttons button {
             padding: 10px 20px;
             border: none;
             border-radius: 6px;
             font-size: 16px;
             cursor: pointer;
+            min-width: 60px;
         }
-
-        .btn-si {
-            background-color: #d32f2f;
+  
+        .btn-confirm {
+            background-color:hsl(0, 65%, 50%);
             color: white;
         }
-
-        .btn-no {
-            background-color: #aaa;
+  
+        .btn-cancel {
+            background-color: hsl(0, 0%, 65%);
             color: white;
         }
-
-        .btn-si:hover {
-            background-color: #b71c1c;
+  
+        .btn-confirm:hover {
+            background-color:hsl(0, 65%, 40%);
         }
-
-        .btn-no:hover {
-            background-color: #888;
+  
+        .btn-cancel:hover {
+            background-color: hsl(0, 0%, 45%);
         }
      
       </style>
   
-      <div class="modal-overlay">
+      <div class="modal-overlay active">
         <div class="modal-content">
+          <button class="close-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M19,3H16.3H7.7H5A2,2 0 0,0 3,5V7.7V16.4V19A2,2 0 0,0 5,21H7.7H16.4H19A2,2 0 0,0 21,19V16.3V7.7V5A2,2 0 0,0 19,3M15.6,17L12,13.4L8.4,17L7,15.6L10.6,12L7,8.4L8.4,7L12,10.6L15.6,7L17,8.4L13.4,12L17,15.6L15.6,17Z" />
+            </svg>
+          </button>
           <h2>¿Estás seguro de eliminar el registro?</h2>
           <div class="modal-buttons">
-            <button class="btn-si" >Sí</button>
-            <button class="btn-no" >No</button>
+            <button class="btn-confirm" >Sí</button>
+            <button class="btn-cancel" >No</button>
           </div>
         </div>
       </div>
-      
       `
+
+    this.renderButtons()
+  }
+
+  renderButtons () {
+    this.shadow.querySelector('.modal-overlay').addEventListener('click', event => {
+      if (event.target.closest('.btn-confirm')) {
+        this.shadow.querySelector('.modal-overlay').classList.remove('active')
+      }
+
+      if (event.target.closest('.btn-cancel')) {
+        this.shadow.querySelector('.modal-overlay').classList.remove('active')
+      }
+
+      if (event.target.closest('.close-button')) {
+        this.shadow.querySelector('.modal-overlay').classList.remove('active')
+      }
+    })
   }
 }
 

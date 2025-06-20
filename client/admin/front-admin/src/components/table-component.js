@@ -33,6 +33,8 @@ class Table extends HTMLElement {
 
       *{
         box-sizing: border-box;
+        font-family: "Nunito Sans", serif;
+        font-optical-sizing: auto;
       }
 
       h1, h2, h3, h4, h5, h6, p{
@@ -75,6 +77,7 @@ class Table extends HTMLElement {
         justify-content: flex-start; /* Icono alineado a la izquierda */
         background-color: hsl(198, 100%, 85%);
         height: 30px;
+        border-radius: 5px;
       }
 
       .table__header-icon{
@@ -92,13 +95,15 @@ class Table extends HTMLElement {
         fill: black;
       }
 
-      .table__body{
+      .table__body {
         display: flex;
         flex-direction: column;
-        gap: 10px;      
+        gap: 1rem;
         width: 90%;
-        margin: 0 auto;
-        margin-top: 25px;
+        margin: 1rem auto;
+        max-height: 63vh;
+        overflow-y: auto;
+        padding-right: 1rem;
       }
 
 
@@ -111,6 +116,7 @@ class Table extends HTMLElement {
       .user-box__data {
         padding: 15px;
         background-color: hsl(200, 77%, 32%);
+        border-radius: 0 0 10px 10px;
       }
 
 
@@ -137,6 +143,7 @@ class Table extends HTMLElement {
         align-items: center;
         padding: 5px 10px;
         background-color: hsl(198, 100%, 85%);
+        border-radius: 5px;
       }
 
       .table__footer-box {

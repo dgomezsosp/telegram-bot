@@ -171,6 +171,14 @@ class Form extends HTMLElement {
         border: none;
         background: white;
         color: black;
+        /* Sombreado interior */
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Opcional: Efecto más pronunciado en focus */
+      .form-element-input input:focus {
+        outline: none;
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
       }
 
 

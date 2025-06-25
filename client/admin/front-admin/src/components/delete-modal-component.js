@@ -2,6 +2,7 @@ class DeleteModal extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
+    this.endpoint = ''
 
     document.addEventListener('delete-modal', this.handleMessage.bind(this))
   }
@@ -12,7 +13,6 @@ class DeleteModal extends HTMLElement {
 
   handleMessage (event) {
     this.shadow.querySelector('.modal-overlay').classList.add('active')
-    console.log('Modal activado por evento')
   }
 
   render () {

@@ -24,6 +24,7 @@ class Main extends HTMLElement {
         gap: 20px;
         padding: 0px 20px;
         width: 100%;
+        margin-top: 30px;
       }
    
     </style>

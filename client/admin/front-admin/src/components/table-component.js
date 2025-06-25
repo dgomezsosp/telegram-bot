@@ -2,6 +2,7 @@ class Table extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
+    this.endpoint = '/api/admin/users'
   }
 
   async connectedCallback () {
@@ -304,8 +305,12 @@ class Table extends HTMLElement {
         const element = event.target.closest('.delete-icon')
         const id = element.dataset.id
         document.dispatchEvent(new CustomEvent('delete-modal', {
+
+          detail: {
+            endpoint: this.endpoint,
+            elementId: id
+          }
         }))
-        console.log('Envío el evento de click de botón delete')
       }
     })
   }

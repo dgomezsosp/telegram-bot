@@ -1,11 +1,24 @@
+import isEqual from 'lodash-es/isEqual'
+import { store } from '../redux/store.js'
+
 class Table extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
     this.endpoint = '/api/admin/users'
+    this.unsubscribe = null
   }
 
   async connectedCallback () {
+    // Escuchar si está suscrito a los cambios del reduce ( cuando una variable cambia de valor ) y puede ver los estados de cualquier variables.
+    this.unsubscribe = store.subscribe(() => {
+      const currentState = store.getState()
+
+      if (currentState.crud.tableEndpoint === this.getAttribute('endpoint')) {
+        this.loadData().then(() => this.render())
+      }
+    })
+
     await this.loadData()
     await this.render()
   }
@@ -304,7 +317,7 @@ class Table extends HTMLElement {
       if (event.target.closest('.delete-icon')) {
         const element = event.target.closest('.delete-icon')
         const id = element.dataset.id
-        document.dispatchEvent(new CustomEvent('delete-modal', {
+        document.dispatchEvent(new CustomEvent('showDeleteModal', {
 
           detail: {
             endpoint: this.endpoint,

@@ -4,14 +4,14 @@ class DeleteModal extends HTMLElement {
     this.shadow = this.attachShadow({ mode: 'open' })
     this.endpoint = ''
 
-    document.addEventListener('delete-modal', this.handleMessage.bind(this))
+    document.addEventListener('showDeleteModal', this.showDeleteModal.bind(this))
   }
 
   connectedCallback () {
     this.render()
   }
 
-  handleMessage (event) {
+  showDeleteModal (event) {
     const { endpoint, elementId } = event.detail
     this.endpoint = `${endpoint}/${elementId}`
     this.shadow.querySelector('.modal-overlay').classList.add('active')

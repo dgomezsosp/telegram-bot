@@ -1,3 +1,7 @@
+import isEqual from 'lodash-es/isEqual'
+import { store } from '../redux/store.js'
+import { refreshTable } from '../redux/crud-slice.js'
+
 class Form extends HTMLElement {
   constructor () {
     super()
@@ -266,6 +270,8 @@ class Form extends HTMLElement {
         if (!response.ok) {
           throw new Error(`Error al guardar los datos: ${response.statusText}`)
         }
+
+        store.dispatch(refreshTable(this.getAttribute('endpoint')))
 
         // const data = await response.json()
 

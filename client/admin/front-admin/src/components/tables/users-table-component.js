@@ -1,20 +1,20 @@
-import isEqual from 'lodash-es/isEqual'
-import { store } from '../redux/store.js'
+import { store } from '../../redux/store.js'
+import { showFormElement } from '../../redux/crud-slice.js'
 
-class Table extends HTMLElement {
+class UsersTable extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
     this.endpoint = '/api/admin/users'
     this.unsubscribe = null
   }
+  // Escuchar si está suscrito a los cambios del reduce ( cuando una variable cambia de valor ) y puede ver los estados de cualquier variables.
 
   async connectedCallback () {
-    // Escuchar si está suscrito a los cambios del reduce ( cuando una variable cambia de valor ) y puede ver los estados de cualquier variables.
     this.unsubscribe = store.subscribe(() => {
       const currentState = store.getState()
 
-      if (currentState.crud.tableEndpoint === this.getAttribute('endpoint')) {
+      if (currentState.crud.tableEndpoint === this.endpoint) {
         this.loadData().then(() => this.render())
       }
     })
@@ -25,7 +25,7 @@ class Table extends HTMLElement {
 
   async loadData () {
     try {
-      const response = await fetch(`${this.endpoint}`)
+      const response = await fetch(this.endpoint)
 
       if (!response.ok) {
         throw new Error(`Error fetching data: ${response.statusText}`)
@@ -308,10 +308,35 @@ class Table extends HTMLElement {
   }
 
   renderButtons () {
-    this.shadow.querySelector('.table').addEventListener('click', event => {
+    this.shadow.querySelector('.table').addEventListener('click', async event => {
       if (event.target.closest('.edit-icon')) {
         const element = event.target.closest('.edit-icon')
         const id = element.dataset.id
+        const endpoint = `${this.endpoint}/${id}`
+
+        try {
+          const response = await fetch(endpoint)
+
+          if (response.status === 500 || response.status === 404) {
+            throw response
+          }
+
+          const data = await response.json()
+
+          const formElement = {
+            endPoint: this.endpoint,
+            data
+          }
+
+          store.dispatch(showFormElement(formElement))
+        } catch (error) {
+          document.dispatchEvent(new CustomEvent('notice', {
+            detail: {
+              message: 'No se han podido recuperar el dato',
+              type: 'error'
+            }
+          }))
+        }
       }
 
       if (event.target.closest('.delete-icon')) {
@@ -329,4 +354,4 @@ class Table extends HTMLElement {
   }
 }
 
-customElements.define('table-component', Table)
+customElements.define('users-table-component', UsersTable)

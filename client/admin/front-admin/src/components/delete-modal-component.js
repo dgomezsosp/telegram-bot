@@ -1,8 +1,11 @@
+import { store } from '../redux/store.js'
+import { refreshTable } from '../redux/crud-slice.js'
 class DeleteModal extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
     this.endpoint = ''
+    this.tableEndpoint = ''
 
     document.addEventListener('showDeleteModal', this.showDeleteModal.bind(this))
   }
@@ -13,6 +16,7 @@ class DeleteModal extends HTMLElement {
 
   showDeleteModal (event) {
     const { endpoint, elementId } = event.detail
+    this.tableEndpoint = endpoint
     this.endpoint = `${endpoint}/${elementId}`
     this.shadow.querySelector('.modal-overlay').classList.add('active')
   }
@@ -188,6 +192,8 @@ class DeleteModal extends HTMLElement {
               type: 'success'
             }
           }))
+
+          store.dispatch(refreshTable(this.tableEndpoint))
 
           this.shadow.querySelector('.modal-overlay').classList.remove('active')
         } catch (error) {

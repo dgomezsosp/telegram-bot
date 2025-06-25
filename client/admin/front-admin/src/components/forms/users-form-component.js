@@ -1,14 +1,26 @@
 import isEqual from 'lodash-es/isEqual'
-import { store } from '../redux/store.js'
-import { refreshTable } from '../redux/crud-slice.js'
+import { store } from '../../redux/store.js'
+import { refreshTable } from '../../redux/crud-slice.js'
 
-class Form extends HTMLElement {
+class UsersForm extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
+    this.endpoint = '/api/admin/users'
+    this.unsubscribe = null
+    this.formElementData = null
   }
 
   connectedCallback () {
+    this.unsubscribe = store.subscribe(() => {
+      const currentState = store.getState()
+
+      if (currentState.crud.formElement && currentState.crud.formElement.endPoint === this.endpoint && !isEqual(this.formElementData, currentState.crud.formElement.data)) {
+        this.formElementData = currentState.crud.formElement.data
+        this.showElement(this.formElementData)
+      }
+    })
+
     this.render()
   }
 
@@ -215,6 +227,7 @@ class Form extends HTMLElement {
       </div>
       <div class="form__body">
         <form>
+          <input type="hidden" name="id">
           <div class="form-element">
             <div class="form-title">
               <span>Nombre:</span>
@@ -237,10 +250,10 @@ class Form extends HTMLElement {
     
     `
     // Se llama a la función para el botón de guardar
-    this.renderSaveButton()
+    this.renderButtons()
   }
 
-  renderSaveButton () {
+  renderButtons () {
     const SaveButton = this.shadow.querySelector('.save-icon')
 
     // async porque se hace un await para una llamada fetch
@@ -256,10 +269,13 @@ class Form extends HTMLElement {
       for (const [key, value] of formData.entries()) {
         formDataJson[key] = value !== '' ? value : null
       }
-      try {
-        const method = 'POST'
 
-        const response = await fetch('/api/admin/users', {
+      const id = this.shadow.querySelector('[name="id"]').value
+      const endpoint = id ? `${this.endpoint}/${id}` : this.endpoint
+      const method = id ? 'PUT' : 'POST'
+      delete formDataJson.id
+      try {
+        const response = await fetch(`${endpoint}`, {
           method,
           headers: {
             'Content-Type': 'application/json'
@@ -271,9 +287,8 @@ class Form extends HTMLElement {
           throw new Error(`Error al guardar los datos: ${response.statusText}`)
         }
 
-        store.dispatch(refreshTable(this.getAttribute('endpoint')))
-
-        // const data = await response.json()
+        store.dispatch(refreshTable(this.endpoint))
+        this.resetForm()
 
         document.dispatchEvent(new CustomEvent('notice', {
           detail: {
@@ -291,7 +306,26 @@ class Form extends HTMLElement {
         console.error('Error al guardar los datos:', error)
       }
     })
+
+    this.shadow.querySelector('.clean-icon').addEventListener('click', async event => {
+      this.resetForm()
+    })
+  }
+
+  showElement (data) {
+    Object.entries(data).forEach(([key, value]) => {
+      if (this.shadow.querySelector(`[name="${key}"]`)) {
+        this.shadow.querySelector(`[name="${key}"]`).value = value
+      }
+    })
+  }
+
+  resetForm () {
+    const form = this.shadow.querySelector('form')
+    form.reset()
+    this.shadow.querySelector('[name="id"]').value = ''
+    this.formElementData = null
   }
 }
 
-customElements.define('form-component', Form)
+customElements.define('users-form-component', UsersForm)

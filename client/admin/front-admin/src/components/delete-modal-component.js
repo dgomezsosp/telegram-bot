@@ -12,6 +12,8 @@ class DeleteModal extends HTMLElement {
   }
 
   handleMessage (event) {
+    const { endpoint, elementId } = event.detail
+    this.endpoint = `${endpoint}/${elementId}`
     this.shadow.querySelector('.modal-overlay').classList.add('active')
   }
 
@@ -166,9 +168,36 @@ class DeleteModal extends HTMLElement {
   }
 
   renderButtons () {
-    this.shadow.querySelector('.modal-overlay').addEventListener('click', event => {
+    this.shadow.querySelector('.modal-overlay').addEventListener('click', async (event) => {
       if (event.target.closest('.btn-confirm')) {
-        this.shadow.querySelector('.modal-overlay').classList.remove('active')
+        try {
+          const response = await fetch(this.endpoint, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+
+          if (!response.ok) {
+            throw new Error('Error al eliminar el registro')
+          }
+
+          document.dispatchEvent(new CustomEvent('notice', {
+            detail: {
+              message: 'Registro eliminado correctamente',
+              type: 'success'
+            }
+          }))
+
+          this.shadow.querySelector('.modal-overlay').classList.remove('active')
+        } catch (error) {
+          document.dispatchEvent(new CustomEvent('notice', {
+            detail: {
+              message: 'No se pudo eliminar el registro',
+              type: 'error'
+            }
+          }))
+        }
       }
 
       if (event.target.closest('.btn-cancel')) {

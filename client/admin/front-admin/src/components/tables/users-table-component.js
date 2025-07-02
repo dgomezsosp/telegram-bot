@@ -101,8 +101,8 @@ class UsersTable extends HTMLElement {
       }
 
       .table__header-icon ,
-      .edit-icon ,
-      .delete-icon ,
+      .edit-button ,
+      .delete-button ,
       .clean-icon,
       .save-icon,
       .table-page-logo {
@@ -112,8 +112,8 @@ class UsersTable extends HTMLElement {
       }
 
       .table__header-icon svg:hover,
-      .edit-icon svg:hover,
-      .delete-icon svg:hover,
+      .edit-button svg:hover,
+      .delete-button svg:hover,
       .table-page-logo{
        
         fill: hsl(0 , 0% , 25%);
@@ -247,7 +247,7 @@ class UsersTable extends HTMLElement {
       userBox.appendChild(upperRow)
 
       const editIcon = document.createElement('button')
-      editIcon.classList.add('edit-icon')
+      editIcon.classList.add('edit-button')
       editIcon.dataset.id = element.id
       upperRow.appendChild(editIcon)
       editIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -256,7 +256,7 @@ class UsersTable extends HTMLElement {
                   d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
               </svg>`
       const deleteIcon = document.createElement('button')
-      deleteIcon.classList.add('delete-icon')
+      deleteIcon.classList.add('delete-button')
       deleteIcon.dataset.id = element.id
       upperRow.appendChild(deleteIcon)
       deleteIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -309,8 +309,8 @@ class UsersTable extends HTMLElement {
 
   renderButtons () {
     this.shadow.querySelector('.table').addEventListener('click', async event => {
-      if (event.target.closest('.edit-icon')) {
-        const element = event.target.closest('.edit-icon')
+      if (event.target.closest('.edit-button')) {
+        const element = event.target.closest('.edit-button')
         const id = element.dataset.id
         const endpoint = `${this.endpoint}/${id}`
 
@@ -339,8 +339,8 @@ class UsersTable extends HTMLElement {
         }
       }
 
-      if (event.target.closest('.delete-icon')) {
-        const element = event.target.closest('.delete-icon')
+      if (event.target.closest('.delete-button')) {
+        const element = event.target.closest('.delete-button')
         const id = element.dataset.id
         document.dispatchEvent(new CustomEvent('showDeleteModal', {
 

@@ -15,9 +15,13 @@ class UsersForm extends HTMLElement {
     this.unsubscribe = store.subscribe(() => {
       const currentState = store.getState()
 
-      if (currentState.crud.formElement && currentState.crud.formElement.endPoint === this.endpoint && !isEqual(this.formElementData, currentState.crud.formElement.data)) {
+      if (currentState.crud.formElement.data && currentState.crud.formElement.endPoint === this.endpoint && !isEqual(this.formElementData, currentState.crud.formElement.data)) {
         this.formElementData = currentState.crud.formElement.data
         this.showElement(this.formElementData)
+      }
+
+      if (!currentState.crud.formElement.data && currentState.crud.formElement.endPoint === this.endpoint) {
+        this.resetForm()
       }
     })
 
@@ -70,33 +74,18 @@ class UsersForm extends HTMLElement {
         padding: 0;
       }
 
-
-
-
-      form{
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
-        gap:1rem;
-      }
-      /* Encabezado del formulario */
-      .form__header {
-
-        
-      }
-
       .form__header-box{
         display: flex;
         justify-content: space-between; /* Alinea los elementos a los extremos */
         align-items: center;
         background: hsl(198, 100%, 85%);
         border-radius: 5px;
-
+        overflow: hidden;
       }
 
       /* Opción 1: Estilo con flecha dropdown */
-      .form__header-box-filter {
-        background: hsl(200, 77%, 42%);
-        padding: 5px 15px;
+      .form__header-box-tabs {
+        display: flex;
         color: white;
         height: 30px;
         border-radius: 5px;
@@ -109,28 +98,24 @@ class UsersForm extends HTMLElement {
         background: hsl(200, 77%, 35%);
       }
 
-      .form__header-box-filter button {
+      .form__header-box-tabs button {
         color: white;
         font-size: 14px;
         display: flex;
         align-items: center;
         gap: 8px;
         font-weight: 500;
+        padding: 5px 15px;
       }
 
-      .form__header-box-filter button::after {
-        content: '';
-        width: 0;
-        height: 0;
-        border-left: 4px solid transparent;
-        border-right: 4px solid transparent;
-        border-top: 4px solid white;
-        margin-left: 5px;
-      }
-
-      .form__header-box-filter button {
-        color: white; 
+      .form__header-box-tabs button {
+        color: hsl(200, 77%, 35%); 
         font-size: 16px;
+      }
+
+      .form__header-box-tabs button.active{
+        background: hsl(200, 77%, 35%);
+        color: hsl(0, 0.00%, 100.00%);
       }
 
       .form__header-icons {
@@ -154,11 +139,49 @@ class UsersForm extends HTMLElement {
       .delete-icon svg:hover,
       .clean-icon:hover,
       .save-icon:hover {
-       
         fill: hsl(0 , 0% , 25%);
       }
 
+      .validation-errors{
+        display: none;
+      }
 
+      .validation-errors.active{
+        background-color: hsl(0, 51.90%, 54.30%);
+        border-radius: 5px;
+        display: block;
+        margin: 1rem 0;
+        padding: 1rem;
+        position: relative;
+      }
+
+      .close-validation-errors{
+        cursor: pointer;
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+      }
+
+      .close-validation-errors svg{
+        fill: hsl(100, 100%, 100%);
+        height: 2rem;
+        width: 2rem;
+      }
+
+      .validation-errors ul{
+        display: flex;
+        flex-direction: column;
+      }
+
+      .tab-content{
+        display: none;
+      }
+
+      .tab-content.active{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
+        gap:1rem;
+      }
 
       /* Ajustar cada elemento del formulario */
       .form-element {
@@ -166,9 +189,7 @@ class UsersForm extends HTMLElement {
         display:flex;
         flex-direction: column;
         gap: 10px 0px;
-
       }
-
 
       /* Campos de entrada */
       .form-element {
@@ -197,15 +218,18 @@ class UsersForm extends HTMLElement {
         box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
       }
 
-
+      .form-element-input .error{
+        border: 1px solid hsl(0, 51.90%, 54.30%);
+      }
    
     </style>
 
     <section class="form">
       <div class="form__header">
         <div class="form__header-box">
-          <div class="form__header-box-filter">
-            <button>General</button>
+          <div class="form__header-box-tabs">
+            <button class="tab active" data-tab="general">General</button>
+            <button class="tab" data-tab="images">Imagenes</button>
           </div>
           <div class="form__header-icons">
             <button class="clean-icon">
@@ -226,22 +250,40 @@ class UsersForm extends HTMLElement {
         </div>
       </div>
       <div class="form__body">
+        <div class="validation-errors">
+          <ul></ul>
+          <div class="close-validation-errors">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>close-circle-outline</title><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2 12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z" /></svg>
+          </div>
+        </div>
         <form>
           <input type="hidden" name="id">
-          <div class="form-element">
-            <div class="form-title">
-              <span>Nombre:</span>
+          <div class="tab-content active" data-tab="general">
+            <div class="form-element">
+              <div class="form-title">
+                <span>Nombre:</span>
+              </div>
+              <div class="form-element-input">
+                <input type="text" placeholder="Nombre" name="name">
+              </div>
             </div>
-            <div class="form-element-input">
-              <input type="text" placeholder="Nombre" name="name">
+            <div class="form-element">
+              <div class="form-title">
+                <span>Email:</span>
+              </div>
+              <div class="form-element-input">
+                <input type="email" placeholder="Email" name="email">
+              </div>
             </div>
           </div>
-          <div class="form-element">
-            <div class="form-title">
-              <span>Email:</span>
-            </div>
-            <div class="form-element-input">
-              <input type="email" placeholder="Email" name="email">
+          <div class="tab-content" data-tab="images">
+            <div class="form-element">
+              <div class="form-title">
+                <span>Avatar:</span>
+              </div>
+              <div class="form-element-input">
+                <input type="image" name="avatar">
+              </div>
             </div>
           </div>
         </form>
@@ -254,61 +296,85 @@ class UsersForm extends HTMLElement {
   }
 
   renderButtons () {
-    const SaveButton = this.shadow.querySelector('.save-icon')
-
     // async porque se hace un await para una llamada fetch
-    SaveButton.addEventListener('click', async event => {
+    this.shadow.querySelector('.form').addEventListener('click', async event => {
       // Prevenir que no se pasen los datos de los campo a través de la url.
       event.preventDefault()
 
-      const form = this.shadow.querySelector('form')
-      // Coge todos los valores de los inputs del formulario y te los prepara.
-      const formData = new FormData(form)
-      const formDataJson = {}
+      if (event.target.closest('.save-icon')) {
+        const form = this.shadow.querySelector('form')
+        // Coge todos los valores de los inputs del formulario y te los prepara.
+        const formData = new FormData(form)
+        const formDataJson = {}
 
-      for (const [key, value] of formData.entries()) {
-        formDataJson[key] = value !== '' ? value : null
-      }
-
-      const id = this.shadow.querySelector('[name="id"]').value
-      const endpoint = id ? `${this.endpoint}/${id}` : this.endpoint
-      const method = id ? 'PUT' : 'POST'
-      delete formDataJson.id
-      try {
-        const response = await fetch(`${endpoint}`, {
-          method,
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formDataJson)
-        })
-
-        if (!response.ok) {
-          throw new Error(`Error al guardar los datos: ${response.statusText}`)
+        for (const [key, value] of formData.entries()) {
+          formDataJson[key] = value !== '' ? value : null
         }
 
-        store.dispatch(refreshTable(this.endpoint))
-        this.resetForm()
+        const id = this.shadow.querySelector('[name="id"]').value
+        const endpoint = id ? `${this.endpoint}/${id}` : this.endpoint
+        const method = id ? 'PUT' : 'POST'
+        delete formDataJson.id
+        try {
+          const response = await fetch(`${endpoint}`, {
+            method,
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formDataJson)
+          })
 
-        document.dispatchEvent(new CustomEvent('notice', {
-          detail: {
-            message: 'Datos guardados correctamente',
-            type: 'success'
+          if (!response.ok) {
+            throw response
           }
-        }))
-      } catch (error) {
-        document.dispatchEvent(new CustomEvent('notice', {
-          detail: {
-            message: 'No se han podido guardar los datos',
-            type: 'error'
+
+          store.dispatch(refreshTable(this.endpoint))
+          this.resetForm()
+
+          document.dispatchEvent(new CustomEvent('notice', {
+            detail: {
+              message: 'Datos guardados correctamente',
+              type: 'success'
+            }
+          }))
+        } catch (error) {
+          if (error.status === 422) {
+            const data = await error.json()
+            this.validationErrors(data.message)
+
+            document.dispatchEvent(new CustomEvent('notice', {
+              detail: {
+                message: 'Hay errores de validación en los datos',
+                type: 'error'
+              }
+            }))
           }
-        }))
-        console.error('Error al guardar los datos:', error)
+
+          if (error.status === 500) {
+            document.dispatchEvent(new CustomEvent('notice', {
+              detail: {
+                message: 'No se han podido guardar los datos',
+                type: 'error'
+              }
+            }))
+          }
+        }
       }
-    })
 
-    this.shadow.querySelector('.clean-icon').addEventListener('click', async event => {
-      this.resetForm()
+      if (event.target.closest('.clean-icon')) {
+        this.resetForm()
+      }
+
+      if (event.target.closest('.tab')) {
+        this.shadow.querySelector('.tab.active').classList.remove('active')
+        event.target.closest('.tab').classList.add('active')
+        this.shadow.querySelector('.tab-content.active').classList.remove('active')
+        this.shadow.querySelector(`.tab-content[data-tab='${event.target.closest('.tab').dataset.tab}']`).classList.add('active')
+      }
+
+      if (event.target.closest('.close-validation-errors')) {
+        this.closeValidationErrors()
+      }
     })
   }
 
@@ -318,6 +384,28 @@ class UsersForm extends HTMLElement {
         this.shadow.querySelector(`[name="${key}"]`).value = value
       }
     })
+  }
+
+  validationErrors (messages) {
+    const validationErrorsContainer = this.shadow.querySelector('.validation-errors')
+    validationErrorsContainer.classList.add('active')
+
+    const validationList = this.shadow.querySelector('.validation-errors ul')
+    validationList.innerHTML = ''
+
+    this.shadow.querySelectorAll('.form-element-input .error').forEach(input => input.classList.remove('error'))
+
+    messages.forEach(error => {
+      const message = document.createElement('li')
+      message.textContent = error.message
+      validationList.appendChild(message)
+      this.shadow.querySelector(`.form-element-input>[name='${error.path}']`).classList.add('error')
+    })
+  }
+
+  closeValidationErrors () {
+    const validationErrorsContainer = this.shadow.querySelector('.validation-errors')
+    validationErrorsContainer.classList.remove('active')
   }
 
   resetForm () {

@@ -1,6 +1,7 @@
-import './components/forms/users-form-component.js'
 import './components/header-component.js'
 import './components/tables/users-table-component.js'
+import './components/forms/users-form-component.js'
+import './components/filters/users-filter-component.js'
 import './components/title-component.js'
 import './components/menu-component.js'
 import './components/main-component.js'

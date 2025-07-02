@@ -23,17 +23,15 @@ class UsersTable extends HTMLElement {
     await this.render()
   }
 
-  async loadData () {
+  async loadData (endpoint = this.endpoint) {
     try {
-      const response = await fetch(this.endpoint)
+      const response = await fetch(endpoint)
 
       if (!response.ok) {
         throw new Error(`Error fetching data: ${response.statusText}`)
       }
 
       this.data = await response.json()
-
-      console.log(this.data)
     } catch (error) {
       console.error('Error loading data:', error)
       this.data = []
@@ -125,7 +123,8 @@ class UsersTable extends HTMLElement {
         gap: 1rem;
         width: 90%;
         margin: 1rem auto;
-        max-height: 63vh;
+        min-height: 70vh;
+        max-height: 70vh;
         overflow-y: auto;
         padding-right: 1rem;
       }
@@ -189,10 +188,9 @@ class UsersTable extends HTMLElement {
         align-items: center;
       }
 
-      .table-page-info {
+      .table-footer-info {
         text-align: left;
         color: rgb(0, 0, 0);
-
       }
 
       .table-page-logo svg {
@@ -201,16 +199,49 @@ class UsersTable extends HTMLElement {
         fill: rgb(0, 0, 0);
       }
 
+      .table-footer-pagination {
+        display: flex;
+        gap: 0.25rem;
+      }
 
-  
+      .table-footer-pagination-button {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 6px;
+        transition: background-color 0.2s ease;
+      }
 
-   
+      .table-footer-pagination-button:hover {
+        background-color: #f3f4f6;
+      }
+
+      .table-footer-pagination-button.disabled:hover {
+        background-color: transparent;
+        cursor: not-allowed;
+      }
+
+      .table-footer-pagination-button svg {
+        fill: #6b7280;
+        width: 1.5rem;
+        height: 1.5rem;
+        transition: fill 0.2s ease;
+      }
+
+      .table-footer-pagination-button svg {
+        fill: hsl(200, 77%, 35%);
+      }
+
+      .table-footer-pagination-button.disabled svg {
+        fill:rgb(85, 85, 85);
+      }
     </style>
 
     <section class="table">
       <div class="table__header">
         <div class="table__header-box">
-          <button class="table__header-icon">
+          <button class="filter-button table__header-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <title>filter-check</title>
               <path
@@ -222,14 +253,23 @@ class UsersTable extends HTMLElement {
       <div class="table__body"></div>
       <div class="table__footer">
         <div class="table__footer-box">
-          <div class="table-page-info">1 registro en total, mostrando 10 por página</div>
-          <button class="table-page-logo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <title>chevron-double-left</title>
-              <path
-                d="M18.41,7.41L17,6L11,12L17,18L18.41,16.59L13.83,12L18.41,7.41M12.41,7.41L11,6L5,12L11,18L12.41,16.59L7.83,12L12.41,7.41Z" />
-            </svg>
-        </button>
+          <div class="table-footer-info">
+            <span>${this.data.meta.total} registro en total, mostrando ${this.data.meta.size} por página</span>
+          </div>
+          <div class="table-footer-pagination">
+            <div class="table-footer-pagination-button ${this.data.meta.currentPage === 1 ? 'disabled' : ''}" data-page="1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chevron-double-left</title><path d="M18.41,7.41L17,6L11,12L17,18L18.41,16.59L13.83,12L18.41,7.41M12.41,7.41L11,6L5,12L11,18L12.41,16.59L7.83,12L12.41,7.41Z" /></svg>
+            </div>
+            <div class="table-footer-pagination-button ${this.data.meta.currentPage === 1 ? 'disabled' : ''}" data-page="${this.data.meta.currentPage > 1 ? this.data.meta.currentPage - 1 : 1}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chevron-left</title><path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" /></svg>
+            </div>
+            <div class="table-footer-pagination-button ${this.data.meta.currentPage === this.data.meta.pages ? 'disabled' : ''}"  data-page="${this.data.meta.currentPage < this.data.meta.pages ? this.data.meta.currentPage + 1 : this.data.meta.currentPage}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chevron-right</title><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg>
+            </div>
+            <div class="table-footer-pagination-button ${this.data.meta.currentPage === this.data.meta.pages ? 'disabled' : ''}" data-page="${this.data.meta.pages}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chevron-double-right</title><path d="M5.59,7.41L7,6L13,12L7,18L5.59,16.59L10.17,12L5.59,7.41M11.59,7.41L13,6L19,12L13,18L11.59,16.59L16.17,12L11.59,7.41Z" /></svg>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -251,7 +291,7 @@ class UsersTable extends HTMLElement {
       editIcon.dataset.id = element.id
       upperRow.appendChild(editIcon)
       editIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <title>pencil</title>
+                <title>editar</title>
                 <path
                   d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
               </svg>`
@@ -260,7 +300,7 @@ class UsersTable extends HTMLElement {
       deleteIcon.dataset.id = element.id
       upperRow.appendChild(deleteIcon)
       deleteIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <title>delete</title>
+                <title>eliminar</title>
                 <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
               </svg>`
 
@@ -349,6 +389,16 @@ class UsersTable extends HTMLElement {
             elementId: id
           }
         }))
+      }
+
+      if (event.target.closest('.filter-button')) {
+        document.dispatchEvent(new CustomEvent('showUserFilterModal'))
+      }
+
+      if (event.target.closest('.table-footer-pagination-button') && !event.target.closest('.disabled')) {
+        const page = event.target.closest('.table-footer-pagination-button').dataset.page
+        const endpoint = `${this.endpoint}?page=${page}`
+        this.loadData(endpoint).then(() => this.render())
       }
     })
   }

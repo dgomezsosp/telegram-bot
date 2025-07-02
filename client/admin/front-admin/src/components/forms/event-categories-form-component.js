@@ -2,11 +2,11 @@ import isEqual from 'lodash-es/isEqual'
 import { store } from '../../redux/store.js'
 import { refreshTable } from '../../redux/crud-slice.js'
 
-class UsersForm extends HTMLElement {
+class EventCategoryForm extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.endpoint = '/api/admin/users'
+    this.endpoint = '/api/admin/event-categories'
     this.unsubscribe = null
     this.formElementData = null
   }
@@ -267,24 +267,6 @@ class UsersForm extends HTMLElement {
                 <input type="text" placeholder="Nombre" name="name">
               </div>
             </div>
-            <div class="form-element">
-              <div class="form-title">
-                <span>Email:</span>
-              </div>
-              <div class="form-element-input">
-                <input type="email" placeholder="Email" name="email">
-              </div>
-            </div>
-          </div>
-          <div class="tab-content" data-tab="images">
-            <div class="form-element">
-              <div class="form-title">
-                <span>Avatar:</span>
-              </div>
-              <div class="form-element-input">
-                <input type="image" name="avatar">
-              </div>
-            </div>
           </div>
         </form>
       </div>
@@ -428,4 +410,4 @@ class UsersForm extends HTMLElement {
   }
 }
 
-customElements.define('users-form-component', UsersForm)
+customElements.define('event-categories-form-component', EventCategoryForm)

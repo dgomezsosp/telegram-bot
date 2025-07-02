@@ -1,11 +1,11 @@
 import { store } from '../../redux/store.js'
 import { showFormElement } from '../../redux/crud-slice.js'
 
-class UsersTable extends HTMLElement {
+class EventCategoryTable extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.endpoint = '/api/admin/users'
+    this.endpoint = '/api/admin/event-categories'
     this.filterQuery = null
     this.unsubscribe = null
   }
@@ -282,6 +282,12 @@ class UsersTable extends HTMLElement {
     </section>
     
     `
+    if (this.data.rows.length === 0) {
+      const tableBody = this.shadow.querySelector('.table__body')
+      const message = document.createElement('span')
+      message.textContent = 'No hay ningún registro'
+      tableBody.appendChild(message)
+    }
 
     this.data.rows.forEach(element => {
       const tableBody = this.shadow.querySelector('.table__body')
@@ -325,14 +331,6 @@ class UsersTable extends HTMLElement {
       name.appendChild(nameLabel)
       name.append(` ${element.name}`)
       ul.appendChild(name)
-
-      const email = document.createElement('li')
-      const emailLabel = document.createElement('span')
-      emailLabel.textContent = 'Email: '
-      emailLabel.style.fontWeight = 'bold'
-      email.appendChild(emailLabel)
-      email.append(` ${element.email}`)
-      ul.appendChild(email)
 
       const createdAt = document.createElement('li')
       const createdAtLabel = document.createElement('span')
@@ -419,4 +417,4 @@ class UsersTable extends HTMLElement {
   }
 }
 
-customElements.define('users-table-component', UsersTable)
+customElements.define('event-categories-table-component', EventCategoryTable)

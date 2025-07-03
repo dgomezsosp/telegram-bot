@@ -7,7 +7,7 @@ class UserFilter extends HTMLElement {
     this.shadow = this.attachShadow({ mode: 'open' })
     this.endpoint = '/api/admin/users'
     this.tableEndpoint = ''
-    document.addEventListener('showFilterModal', this.showFilterModal.bind(this))
+    document.addEventListener('showUsersFilterModal', this.showFilterModal.bind(this))
   }
 
   connectedCallback () {
@@ -15,6 +15,7 @@ class UserFilter extends HTMLElement {
   }
 
   showFilterModal (event) {
+    console.log('hola')
     if (event.detail.endpoint === this.endpoint) {
       this.shadow.querySelector('.overlay').classList.add('active')
     }

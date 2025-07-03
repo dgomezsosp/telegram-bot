@@ -333,7 +333,6 @@ class UsersForm extends HTMLElement {
             throw response
           }
 
-          // *** NUEVO: Limpiar errores de validación en caso de éxito ***
           this.closeValidationErrors()
 
           store.dispatch(refreshTable(this.endpoint))

@@ -398,6 +398,14 @@ class UsersTable extends HTMLElement {
         }))
       }
 
+      if (event.target.closest('.filter-button')) {
+        document.dispatchEvent(new CustomEvent('showUsersFilterModal', {
+          detail: {
+            endpoint: this.endpoint
+          }
+        }))
+      }
+
       if (event.target.closest('.table-footer-pagination-button') && !event.target.closest('.disabled')) {
         const page = event.target.closest('.table-footer-pagination-button').dataset.page
         let endpoint = `${this.endpoint}?page=${page}`
@@ -406,14 +414,6 @@ class UsersTable extends HTMLElement {
           endpoint = `${endpoint}&${this.filterQuery}`
         }
         this.loadData(endpoint).then(() => this.render())
-
-        if (event.target.closest('.filter-button')) {
-          document.dispatchEvent(new CustomEvent('showFilterModal', {
-            detail: {
-              endpoint: this.endpoint
-            }
-          }))
-        }
       }
     })
   }

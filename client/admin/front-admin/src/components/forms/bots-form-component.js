@@ -2,11 +2,11 @@ import isEqual from 'lodash-es/isEqual'
 import { store } from '../../redux/store.js'
 import { refreshTable } from '../../redux/crud-slice.js'
 
-class UsersForm extends HTMLElement {
+class BotsForm extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.endpoint = '/api/admin/users'
+    this.endpoint = '/api/admin/bots'
     this.unsubscribe = null
     this.formElementData = null
   }
@@ -179,8 +179,8 @@ class UsersForm extends HTMLElement {
 
       .tab-content.active{
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
-        gap:1rem;
+        grid-template-columns: 1fr 1fr; /* Dos columnas de igual ancho */
+        gap: 1rem;
       }
 
       /* Ajustar cada elemento del formulario */
@@ -212,14 +212,47 @@ class UsersForm extends HTMLElement {
         box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
+      .form-element-input textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        box-sizing: border-box;
+        border: none;
+        background: white;
+        color: black;
+        /* Sombreado interior */
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        resize: vertical;
+        min-height: 80px;
+        font-family: "Nunito Sans", serif;
+        font-optical-sizing: auto;
+      }
+
+      .form-element.full-width {
+        grid-column: 1 / -1; /* Ocupa desde la primera hasta la última columna */
+      }
+
       /* Opcional: Efecto más pronunciado en focus */
-      .form-element-input input:focus {
+      .form-element-input input:focus,
+      .form-element-input textarea:focus {
         outline: none;
         box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
       }
 
       .form-element-input .error{
         border: 1px solid hsl(0, 51.90%, 54.30%);
+      }
+
+      .form-element-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        grid-column: 1 / -1; /* Ocupa todo el ancho */
+      }
+
+      /* Opcional: ajustar el ancho de los inputs dentro del grupo */
+      .form-element-group .form-element-input input {
+        width: 100%;
       }
    
     </style>
@@ -259,20 +292,38 @@ class UsersForm extends HTMLElement {
         <form>
           <input type="hidden" name="id">
           <div class="tab-content active" data-tab="general">
-            <div class="form-element">
-              <div class="form-title">
-                <span>Nombre:</span>
+            <div class="form-element-group">
+              <div class="form-element">
+                <div class="form-title">
+                  <span>Nombre:</span>
+                </div>
+                <div class="form-element-input">
+                  <input type="text" placeholder="Nombre" name="name">
+                </div>
               </div>
-              <div class="form-element-input">
-                <input type="text" placeholder="Nombre" name="name">
+              <div class="form-element">
+                <div class="form-title">
+                  <span>Plataforma:</span>
+                </div>
+                <div class="form-element-input">
+                  <input type="text" placeholder="Plataforma" name="platform">
+                </div>
               </div>
             </div>
-            <div class="form-element">
+            <div class="form-element full-width">
               <div class="form-title">
-                <span>Email:</span>
+                <span>Descripción:</span>
               </div>
               <div class="form-element-input">
-                <input type="email" placeholder="Email" name="email">
+                <textarea placeholder="Descripción del bot..." name="description" rows="4"></textarea>
+              </div>
+            </div>
+            <div class="form-element full-width">
+              <div class="form-title">
+                <span>Token:</span>
+              </div>
+              <div class="form-element-input">
+                <input type="text" placeholder="Token" name="token">
               </div>
             </div>
           </div>
@@ -296,11 +347,6 @@ class UsersForm extends HTMLElement {
   }
 
   renderButtons () {
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter') {
-        event.preventDefault()
-      }
-    })
     // async porque se hace un await para una llamada fetch
     this.shadow.querySelector('.form').addEventListener('click', async event => {
       // Prevenir que no se pasen los datos de los campo a través de la url.
@@ -433,4 +479,4 @@ class UsersForm extends HTMLElement {
   }
 }
 
-customElements.define('users-form-component', UsersForm)
+customElements.define('bots-form-component', BotsForm)

@@ -34,7 +34,7 @@ exports.findAll = async (req, res, next) => {
 
     const result = await Bot.findAndCountAll({
       where: condition,
-      attributes: ['id', 'platform', 'name', 'createdAt', 'updatedAt'],
+      attributes: ['id', 'platform', 'name', 'description', 'createdAt', 'updatedAt'],
       limit, // Es lo mismo que escribir limit: limit
       offset,
       order: [['createdAt', 'DESC']]

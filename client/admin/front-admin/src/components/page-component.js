@@ -27,8 +27,8 @@ class PageComponent extends HTMLElement {
       '/admin/usuarios': 'users.html',
       '/admin/eventos': 'events.html',
       '/admin/modal': 'modal.html',
-      '/admin/categorias-de-eventos': 'event-categories.html'
-
+      '/admin/categorias-de-eventos': 'event-categories.html',
+      '/admin/bots': 'bots.html'
     }
     // guardar el filename correspondiente a la ruta de la url.
     const filename = routes[path] || '404.html'

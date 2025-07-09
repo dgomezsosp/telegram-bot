@@ -3,24 +3,35 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('customers', {
+    await queryInterface.createTable('events', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
       },
-      name: {
+      promotorId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      townId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      spotId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      categoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      title: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true
-      },
-      birthDate: {
-        type: Sequelize.DATEONLY,
+      description: {
+        type: Sequelize.TEXT,
         allowNull: false
       },
       createdAt: {
@@ -38,6 +49,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('customers')
+    await queryInterface.dropTable('events')
   }
 }

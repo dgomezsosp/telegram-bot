@@ -1,6 +1,6 @@
 // Se puede sustituir 'User' por 'sequelizeModel' y así es más genérico pero no tan bonito para la lectura
 const sequelizeDb = require('../../models/sequelize')
-const Customer = sequelizeDb.User
+const Customer = sequelizeDb.Customer
 const Op = sequelizeDb.Sequelize.Op
 
 exports.create = async (req, res, next) => {
@@ -34,7 +34,7 @@ exports.findAll = async (req, res, next) => {
 
     const result = await Customer.findAndCountAll({
       where: condition,
-      attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt'],
+      attributes: ['id', 'name', 'email', 'BirthDate', 'createdAt', 'updatedAt'],
       limit, // Es lo mismo que escribir limit: limit
       offset,
       order: [['createdAt', 'DESC']]

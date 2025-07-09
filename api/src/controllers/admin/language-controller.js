@@ -1,16 +1,15 @@
-// Se puede sustituir 'User' por 'sequelizeModel' y así es más genérico pero no tan bonito para la lectura
-const sequelizeDb = require('../../models/sequelize')
-const EventCategory = sequelizeDb.EventCategory
-const Op = sequelizeDb.Sequelize.Op
+const moment = require('moment')
+const mongooseDb = require('../../models/mongoose')
+const Language = mongooseDb.Language
 
 exports.create = async (req, res, next) => {
   try {
-    const data = await EventCategory.create(req.body)
+    let data = await Language.create(req.body)
+    data = data.toObject()
+    data.id = data._id
+
     res.status(200).send(data)
   } catch (err) {
-    if (err.name === 'SequelizeValidationError') {
-      err.statusCode = 422
-    }
     next(err)
   }
 }
@@ -21,33 +20,39 @@ exports.findAll = async (req, res, next) => {
     const limit = parseInt(req.query.size) || 10
     const offset = (page - 1) * limit
     const whereStatement = {}
+    whereStatement.deletedAt = { $exists: false }
 
     for (const key in req.query) {
       if (req.query[key] !== '' && req.query[key] !== 'null' && key !== 'page' && key !== 'size') {
-        whereStatement[key] = { [Op.substring]: req.query[key] }
+        whereStatement[key] = { $regex: req.query[key], $options: 'i' }
       }
     }
 
-    const condition = Object.keys(whereStatement).length > 0
-      ? { [Op.and]: [whereStatement] }
-      : {}
+    const result = await Language.find(whereStatement)
+      .skip(offset)
+      .limit(limit)
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec()
 
-    const result = await EventCategory.findAndCountAll({
-      where: condition,
-      attributes: ['id', 'name', 'createdAt', 'updatedAt'],
-      limit, // Es lo mismo que escribir limit: limit
-      offset,
-      order: [['createdAt', 'DESC']]
-    })
+    const count = await Language.countDocuments(whereStatement)
 
-    result.meta = {
-      total: result.count,
-      pages: Math.ceil(result.count / limit),
-      currentPage: page,
-      size: limit
+    const response = {
+      rows: result.map(doc => ({
+        ...doc,
+        id: doc._id,
+        _id: undefined,
+        createdAt: moment(doc.createdAt).format('YYYY-MM-DD HH:mm'),
+        updatedAt: moment(doc.updatedAt).format('YYYY-MM-DD HH:mm')
+      })),
+      meta: {
+        total: count,
+        pages: Math.ceil(count / limit),
+        currentPage: page
+      }
     }
 
-    res.status(200).send(result)
+    res.status(200).send(response)
   } catch (err) {
     next(err)
   }
@@ -56,7 +61,7 @@ exports.findAll = async (req, res, next) => {
 exports.findOne = async (req, res, next) => {
   try {
     const id = req.params.id
-    const data = await EventCategory.findByPk(id)
+    const data = await Language.findById(id).lean().exec()
 
     if (!data) {
       const err = new Error()
@@ -65,6 +70,7 @@ exports.findOne = async (req, res, next) => {
       throw err
     }
 
+    data.id = data._id
     res.status(200).send(data)
   } catch (err) {
     next(err)
@@ -74,9 +80,9 @@ exports.findOne = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   try {
     const id = req.params.id
-    const [numberRowsAffected] = await EventCategory.update(req.body, { where: { id } })
+    const data = await Language.findByIdAndUpdate(id, req.body, { new: true }).lean().exec()
 
-    if (numberRowsAffected !== 1) {
+    if (!data) {
       const err = new Error()
       err.message = `No se puede actualizar el elemento con la id=${id}. Tal vez no se ha encontrado.`
       err.statusCode = 404
@@ -87,10 +93,6 @@ exports.update = async (req, res, next) => {
       message: 'El elemento ha sido actualizado correctamente.'
     })
   } catch (err) {
-    if (err.name === 'SequelizeValidationError') {
-      err.statusCode = 422
-    }
-
     next(err)
   }
 }
@@ -98,9 +100,9 @@ exports.update = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   try {
     const id = req.params.id
-    const numberRowsAffected = await EventCategory.destroy({ where: { id } })
+    const data = await Language.findByIdAndUpdate(id, { deletedAt: new Date() })
 
-    if (numberRowsAffected !== 1) {
+    if (!data) {
       const err = new Error()
       err.message = `No se puede actualizar el elemento con la id=${id}. Tal vez no se ha encontrado.`
       err.statusCode = 404

@@ -7,9 +7,17 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
         allowNull: false
       },
-      userId: {
+      CustomerId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, rellena el campo "CustomerId".'
+          },
+          notEmpty: {
+            msg: 'Por favor, rellena el campo "CustomerId".'
+          }
+        }
       },
       email: {
         type: DataTypes.STRING,
@@ -62,7 +70,7 @@ module.exports = function (sequelize, DataTypes) {
       }
     }, { // opciones del modelo
       sequelize,
-      tableName: 'user_credentials',
+      tableName: 'customer_credentials',
       timestamps: true,
       paranoid: true, // no borres datos
       indexes: [

@@ -1,24 +1,19 @@
 module.exports = function (sequelize, DataTypes) {
-  const Model = sequelize.define('Customer',
-    {
+  const Model = sequelize.define('PromoterSpot',
+    { // definicion de los campos del modelo
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      email: {
-        type: DataTypes.STRING,
+      promoterId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true
       },
-      birthDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
+      spotId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -36,11 +31,11 @@ module.exports = function (sequelize, DataTypes) {
             : null
         }
       }
-    }, {
+    }, { // opciones del modelo
       sequelize,
-      tableName: 'customers',
+      tableName: 'promoters_spots',
       timestamps: true,
-      paranoid: true,
+      paranoid: true, // no borres datos
       indexes: [
         {
           name: 'PRIMARY',

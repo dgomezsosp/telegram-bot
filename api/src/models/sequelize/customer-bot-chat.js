@@ -1,24 +1,23 @@
 module.exports = function (sequelize, DataTypes) {
-  const Model = sequelize.define('Customer',
-    {
+  const Model = sequelize.define('CustomerBotChat',
+    { // definicion de los campos del modelo
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false
+      customerBotId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
-      email: {
+      emisor: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
       },
-      birthDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
+      message: {
+        type: DataTypes.TEXT,
+        allowNull: false,
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -36,11 +35,11 @@ module.exports = function (sequelize, DataTypes) {
             : null
         }
       }
-    }, {
+    }, { // opciones del modelo
       sequelize,
-      tableName: 'customers',
+      tableName: 'customer_bot_chats',
       timestamps: true,
-      paranoid: true,
+      paranoid: true, // no borres datos
       indexes: [
         {
           name: 'PRIMARY',

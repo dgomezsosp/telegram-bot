@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-  const Model = sequelize.define('UserCredential',
+  const Model = sequelize.define('CustomerActivationToken',
     { // definicion de los campos del modelo
       id: {
         type: DataTypes.INTEGER,
@@ -7,42 +7,53 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
         allowNull: false
       },
-      userId: {
+      CustomerId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
         validate: {
-          isEmail: {
-            args: true, // viene por defecto, no hace falta ponerlo
-            msg: 'Debe ser um e-mail válido'
-          },
           notNull: {
-            msg: 'Por favor, rellena el campo "Email".'
+            msg: 'Por favor, rellena el campo "userId".'
           },
           notEmpty: {
-            msg: 'Por favor, rellena el campo "Email".'
+            msg: 'Por favor, rellena el campo "userId".'
           }
         }
       },
-      password: {
+      token: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notNull: {
-            msg: 'Por favor, rellena el campo "Contraseña".'
+            msg: 'Por favor, rellena el campo "token".'
           },
           notEmpty: {
-            msg: 'Por favor, rellena el campo "Constraseña".'
+            msg: 'Por favor, rellena el campo "token".'
           }
         }
       },
-      lastPasswordChange: {
+      expirationDate: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, rellena el campo "expirationDate".'
+          },
+          notEmpty: {
+            msg: 'Por favor, rellena el campo "expirationDate".'
+          }
+        }
+      },
+      used: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, rellena el campo "used".'
+          },
+          notEmpty: {
+            msg: 'Por favor, rellena el campo "used".'
+          }
+        }
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -62,7 +73,7 @@ module.exports = function (sequelize, DataTypes) {
       }
     }, { // opciones del modelo
       sequelize,
-      tableName: 'user_credentials',
+      tableName: 'customer-activation-tokens',
       timestamps: true,
       paranoid: true, // no borres datos
       indexes: [

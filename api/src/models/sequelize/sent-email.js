@@ -1,24 +1,43 @@
 module.exports = function (sequelize, DataTypes) {
-  const Model = sequelize.define('Customer',
-    {
+  const Model = sequelize.define('SentEmail',
+    { // definicion de los campos del modelo
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      email: {
+      userType: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        validate: {
+          notNull: {
+            msg: 'Por favor, rellena el campo "Tipo Usuario".'
+          },
+          notEmpty: {
+            msg: 'Por favor, rellena el campo "Tipo Usuario".'
+          }
+        }
       },
-      birthDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      emailTemplate: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      sentAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      readedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      uuid: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -36,11 +55,11 @@ module.exports = function (sequelize, DataTypes) {
             : null
         }
       }
-    }, {
+    }, { // opciones del modelo
       sequelize,
-      tableName: 'customers',
+      tableName: 'sent_emails',
       timestamps: true,
-      paranoid: true,
+      paranoid: true, // no borres datos
       indexes: [
         {
           name: 'PRIMARY',

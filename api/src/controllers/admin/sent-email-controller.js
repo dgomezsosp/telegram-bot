@@ -1,11 +1,11 @@
 // Se puede sustituir 'User' por 'sequelizeModel' y así es más genérico pero no tan bonito para la lectura
 const sequelizeDb = require('../../models/sequelize')
-const EventCategory = sequelizeDb.EventCategory
+const SentEmail = sequelizeDb.SentEmail
 const Op = sequelizeDb.Sequelize.Op
 
 exports.create = async (req, res, next) => {
   try {
-    const data = await EventCategory.create(req.body)
+    const data = await SentEmail.create(req.body)
     res.status(200).send(data)
   } catch (err) {
     if (err.name === 'SequelizeValidationError') {
@@ -32,9 +32,9 @@ exports.findAll = async (req, res, next) => {
       ? { [Op.and]: [whereStatement] }
       : {}
 
-    const result = await EventCategory.findAndCountAll({
+    const result = await SentEmail.findAndCountAll({
       where: condition,
-      attributes: ['id', 'name', 'createdAt', 'updatedAt'],
+      attributes: ['id', 'userType', 'userId', 'emailTemplate', 'sentAt', 'readedAt', 'uuid', 'createdAt', 'updatedAt'],
       limit, // Es lo mismo que escribir limit: limit
       offset,
       order: [['createdAt', 'DESC']]
@@ -56,7 +56,7 @@ exports.findAll = async (req, res, next) => {
 exports.findOne = async (req, res, next) => {
   try {
     const id = req.params.id
-    const data = await EventCategory.findByPk(id)
+    const data = await SentEmail.findByPk(id)
 
     if (!data) {
       const err = new Error()
@@ -74,7 +74,7 @@ exports.findOne = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   try {
     const id = req.params.id
-    const [numberRowsAffected] = await EventCategory.update(req.body, { where: { id } })
+    const [numberRowsAffected] = await SentEmail.update(req.body, { where: { id } })
 
     if (numberRowsAffected !== 1) {
       const err = new Error()
@@ -98,7 +98,7 @@ exports.update = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   try {
     const id = req.params.id
-    const numberRowsAffected = await EventCategory.destroy({ where: { id } })
+    const numberRowsAffected = await SentEmail.destroy({ where: { id } })
 
     if (numberRowsAffected !== 1) {
       const err = new Error()

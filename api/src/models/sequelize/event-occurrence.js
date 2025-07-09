@@ -1,24 +1,39 @@
 module.exports = function (sequelize, DataTypes) {
-  const Model = sequelize.define('Customer',
-    {
+  const Model = sequelize.define('EventOccurrence',
+    { // definicion de los campos del modelo
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      email: {
+      eventId: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
       },
-      birthDate: {
+      startDateTime: {
         type: DataTypes.DATEONLY,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, rellena el campo "Hora Inicio".'
+          },
+          notEmpty: {
+            msg: 'Por favor, rellena el campo "Hora Inicio".'
+          }
+        }
+      },
+      endDateTime: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, rellena el campo "Hora Fin".'
+          },
+          notEmpty: {
+            msg: 'Por favor, rellena el campo "Hora Fin".'
+          }
+        }
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -36,11 +51,11 @@ module.exports = function (sequelize, DataTypes) {
             : null
         }
       }
-    }, {
+    }, { // opciones del modelo
       sequelize,
-      tableName: 'customers',
+      tableName: 'event_occurrences',
       timestamps: true,
-      paranoid: true,
+      paranoid: true, // no borres datos
       indexes: [
         {
           name: 'PRIMARY',

@@ -1,24 +1,35 @@
 module.exports = function (sequelize, DataTypes) {
-  const Model = sequelize.define('Customer',
-    {
+  const Model = sequelize.define('PromoterActivationToken',
+    { // definicion de los campos del modelo
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, rellena el campo "userId".'
+          },
+          notEmpty: {
+            msg: 'Por favor, rellena el campo "userId".'
+          }
+        }
       },
-      email: {
+      token: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
       },
-      birthDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
+      expirationDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      used: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -36,11 +47,11 @@ module.exports = function (sequelize, DataTypes) {
             : null
         }
       }
-    }, {
+    }, { // opciones del modelo
       sequelize,
-      tableName: 'customers',
+      tableName: 'promoter-activation-tokens',
       timestamps: true,
-      paranoid: true,
+      paranoid: true, // no borres datos
       indexes: [
         {
           name: 'PRIMARY',

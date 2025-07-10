@@ -9,7 +9,6 @@ class BotsTable extends HTMLElement {
     this.filterQuery = null
     this.unsubscribe = null
   }
-  // Escuchar si está suscrito a los cambios del reduce ( cuando una variable cambia de valor ) y puede ver los estados de cualquier variables.
 
   async connectedCallback () {
     this.unsubscribe = store.subscribe(() => {
@@ -95,7 +94,7 @@ class BotsTable extends HTMLElement {
 
       .table__header {
         display: flex;
-        justify-content: flex-start; /* Icono alineado a la izquierda */
+        justify-content: flex-start; 
         background-color: hsl(198, 100%, 85%);
         height: 30px;
         border-radius: 5px;
@@ -137,21 +136,21 @@ class BotsTable extends HTMLElement {
       }
 
       .table__body::-webkit-scrollbar {
-        width: 8px; /* ancho del scrollbar */
+        width: 8px;
       }
 
       .table__body::-webkit-scrollbar-track {
-        background: #e0e0e0; /* color del fondo de la barra */
+        background: #e0e0e0; 
         border-radius: 10px;
       }
 
       .table__body::-webkit-scrollbar-thumb {
-        background: hsl(200, 77%, 42%); /* color azul del "pulgar" */
+        background: hsl(200, 77%, 42%);
         border-radius: 10px;
       }
 
       .table__body::-webkit-scrollbar-thumb:hover {
-        background: hsl(200, 77%, 32%); /* más oscuro al hacer hover */
+        background: hsl(200, 77%, 32%); 
       }
 
 
@@ -405,6 +404,14 @@ class BotsTable extends HTMLElement {
         }))
       }
 
+      if (event.target.closest('.filter-button')) {
+        document.dispatchEvent(new CustomEvent('showFilterModal', {
+          detail: {
+            endpoint: this.endpoint
+          }
+        }))
+      }
+
       if (event.target.closest('.table-footer-pagination-button') && !event.target.closest('.disabled')) {
         const page = event.target.closest('.table-footer-pagination-button').dataset.page
         let endpoint = `${this.endpoint}?page=${page}`
@@ -413,14 +420,6 @@ class BotsTable extends HTMLElement {
           endpoint = `${endpoint}&${this.filterQuery}`
         }
         this.loadData(endpoint).then(() => this.render())
-
-        if (event.target.closest('.filter-button')) {
-          document.dispatchEvent(new CustomEvent('showFilterModal', {
-            detail: {
-              endpoint: this.endpoint
-            }
-          }))
-        }
       }
     })
   }

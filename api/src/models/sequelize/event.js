@@ -10,26 +10,74 @@ module.exports = function (sequelize, DataTypes) {
       promotorId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, selecciona un "Promotor".'
+          },
+          notEmpty: {
+            msg: 'Por favor, selecciona un "Promotor".'
+          }
+        },
       },
       townId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, selecciona una "Ciudad".'
+          },
+          notEmpty: {
+            msg: 'Por favor, selecciona una "Ciudad".'
+          }
+        },
       },
       spotId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, selecciona un "Lugar".'
+          },
+          notEmpty: {
+            msg: 'Por favor, selecciona un "Lugar".'
+          }
+        },
       },
       categoryId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, selecciona una "Categoría".'
+          },
+          notEmpty: {
+            msg: 'Por favor, selecciona una "Categoría".'
+          }
+        },
       },
       title: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, rellena el campo "Título".'
+          },
+          notEmpty: {
+            msg: 'Por favor, rellena el campo "Título".'
+          }
+        },
       },
       description: {
         type: DataTypes.TEXT,
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, rellena el campo "Descripción".'
+          },
+          notEmpty: {
+            msg: 'Por favor, rellena el campo "Descripción".'
+          }
+        },
       },
       createdAt: {
         type: DataTypes.DATE,

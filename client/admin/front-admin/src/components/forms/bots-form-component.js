@@ -76,14 +76,13 @@ class BotsForm extends HTMLElement {
 
       .form__header-box{
         display: flex;
-        justify-content: space-between; /* Alinea los elementos a los extremos */
+        justify-content: space-between; 
         align-items: center;
         background: hsl(198, 100%, 85%);
         border-radius: 5px;
         overflow: hidden;
       }
 
-      /* Opción 1: Estilo con flecha dropdown */
       .form__header-box-tabs {
         display: flex;
         color: white;
@@ -179,11 +178,10 @@ class BotsForm extends HTMLElement {
 
       .tab-content.active{
         display: grid;
-        grid-template-columns: 1fr 1fr; /* Dos columnas de igual ancho */
+        grid-template-columns: 1fr 1fr;
         gap: 1rem;
       }
 
-      /* Ajustar cada elemento del formulario */
       .form-element {
         flex: 1;
         display:flex;
@@ -191,7 +189,6 @@ class BotsForm extends HTMLElement {
         gap: 10px 0px;
       }
 
-      /* Campos de entrada */
       .form-element {
         margin: 10px 0;
       }
@@ -220,7 +217,6 @@ class BotsForm extends HTMLElement {
         border: none;
         background: white;
         color: black;
-        /* Sombreado interior */
         box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         resize: vertical;
         min-height: 80px;
@@ -229,10 +225,9 @@ class BotsForm extends HTMLElement {
       }
 
       .form-element.full-width {
-        grid-column: 1 / -1; /* Ocupa desde la primera hasta la última columna */
+        grid-column: 1 / -1; /
       }
 
-      /* Opcional: Efecto más pronunciado en focus */
       .form-element-input input:focus,
       .form-element-input textarea:focus {
         outline: none;
@@ -250,7 +245,6 @@ class BotsForm extends HTMLElement {
         grid-column: 1 / -1; /* Ocupa todo el ancho */
       }
 
-      /* Opcional: ajustar el ancho de los inputs dentro del grupo */
       .form-element-group .form-element-input input {
         width: 100%;
       }
@@ -342,19 +336,15 @@ class BotsForm extends HTMLElement {
     </section>
     
     `
-    // Se llama a la función para el botón de guardar
     this.renderButtons()
   }
 
   renderButtons () {
-    // async porque se hace un await para una llamada fetch
     this.shadow.querySelector('.form').addEventListener('click', async event => {
-      // Prevenir que no se pasen los datos de los campo a través de la url.
       event.preventDefault()
 
       if (event.target.closest('.save-icon')) {
         const form = this.shadow.querySelector('form')
-        // Coge todos los valores de los inputs del formulario y te los prepara.
         const formData = new FormData(form)
         const formDataJson = {}
 
@@ -379,7 +369,6 @@ class BotsForm extends HTMLElement {
             throw response
           }
 
-          // *** NUEVO: Limpiar errores de validación en caso de éxito ***
           this.closeValidationErrors()
 
           store.dispatch(refreshTable(this.endpoint))
@@ -462,7 +451,6 @@ class BotsForm extends HTMLElement {
     const validationErrorsContainer = this.shadow.querySelector('.validation-errors')
     validationErrorsContainer.classList.remove('active')
 
-    // *** NUEVO: También limpiar la clase error de todos los inputs ***
     this.shadow.querySelectorAll('.form-element-input .error').forEach(input => {
       input.classList.remove('error')
     })
@@ -474,7 +462,6 @@ class BotsForm extends HTMLElement {
     this.shadow.querySelector('[name="id"]').value = ''
     this.formElementData = null
 
-    // *** NUEVO: También limpiar errores al resetear el formulario ***
     this.closeValidationErrors()
   }
 }

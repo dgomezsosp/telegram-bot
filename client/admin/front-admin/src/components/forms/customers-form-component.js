@@ -2,11 +2,11 @@ import isEqual from 'lodash-es/isEqual'
 import { store } from '../../redux/store.js'
 import { refreshTable } from '../../redux/crud-slice.js'
 
-class PromotersForm extends HTMLElement {
+class CustomersForm extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.endpoint = '/api/admin/promoters'
+    this.endpoint = '/api/admin/customers'
     this.unsubscribe = null
     this.formElementData = null
   }
@@ -76,7 +76,7 @@ class PromotersForm extends HTMLElement {
 
       .form__header-box{
         display: flex;
-        justify-content: space-between; /* Alinea los elementos a los extremos */
+        justify-content: space-between; 
         align-items: center;
         background: hsl(198, 100%, 85%);
         border-radius: 5px;
@@ -178,8 +178,8 @@ class PromotersForm extends HTMLElement {
 
       .tab-content.active{
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
-        gap:1rem;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
       }
 
       .form-element {
@@ -205,16 +205,48 @@ class PromotersForm extends HTMLElement {
         border: none;
         background: white;
         color: black;
+        /* Sombreado interior */
         box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
-      .form-element-input input:focus {
+      .form-element-input textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        box-sizing: border-box;
+        border: none;
+        background: white;
+        color: black;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        resize: vertical;
+        min-height: 80px;
+        font-family: "Nunito Sans", serif;
+        font-optical-sizing: auto;
+      }
+
+      .form-element.full-width {
+        grid-column: 1 / -1; /
+      }
+
+      .form-element-input input:focus,
+      .form-element-input textarea:focus {
         outline: none;
         box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
       }
 
       .form-element-input .error{
         border: 1px solid hsl(0, 51.90%, 54.30%);
+      }
+
+      .form-element-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        grid-column: 1 / -1; /* Ocupa todo el ancho */
+      }
+
+      .form-element-group .form-element-input input {
+        width: 100%;
       }
    
     </style>
@@ -254,20 +286,46 @@ class PromotersForm extends HTMLElement {
         <form>
           <input type="hidden" name="id">
           <div class="tab-content active" data-tab="general">
-            <div class="form-element">
-              <div class="form-title">
-                <span>Nombre:</span>
+            <div class="form-element-group">
+              <div class="form-element">
+                <div class="form-title">
+                  <span>Nombre:</span>
+                </div>
+                <div class="form-element-input">
+                  <input type="text" placeholder="Nombre" name="name">
+                </div>
               </div>
-              <div class="form-element-input">
-                <input type="text" placeholder="Nombre" name="name">
+              <div class="form-element">
+                <div class="form-title">
+                  <span>Email:</span>
+                </div>
+                <div class="form-element-input">
+                  <input type="email" placeholder="Email" name="email">
+                </div>
               </div>
-            </div>
-            <div class="form-element">
-              <div class="form-title">
-                <span>Email:</span>
+              <div class="form-element">
+                <div class="form-title">
+                  <span>Prefijo telefónico:</span>
+                </div>
+                <div class="form-element-input">
+                  <input type="text" placeholder="Prefijo telefónico" name="prefix">
+                </div>
               </div>
-              <div class="form-element-input">
-                <input type="email" placeholder="Email" name="email">
+              <div class="form-element">
+                <div class="form-title">
+                  <span>Teléfono:</span>
+                </div>
+                <div class="form-element-input">
+                  <input type="text" placeholder="telephone" name="telephone">
+                </div>
+              </div>
+              <div class="form-element">
+                <div class="form-title">
+                  <span>Fecha de nacimiento:</span>
+                </div>
+                <div class="form-element-input">
+                  <input type="date" placeholder="Fecha nacimiento" name="birthDate">
+                </div>
               </div>
             </div>
           </div>
@@ -290,11 +348,6 @@ class PromotersForm extends HTMLElement {
   }
 
   renderButtons () {
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter') {
-        event.preventDefault()
-      }
-    })
     this.shadow.querySelector('.form').addEventListener('click', async event => {
       event.preventDefault()
 
@@ -421,4 +474,4 @@ class PromotersForm extends HTMLElement {
   }
 }
 
-customElements.define('promoters-form-component', PromotersForm)
+customElements.define('customers-form-component', CustomersForm)

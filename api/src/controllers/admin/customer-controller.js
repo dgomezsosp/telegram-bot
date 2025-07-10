@@ -34,7 +34,7 @@ exports.findAll = async (req, res, next) => {
 
     const result = await Customer.findAndCountAll({
       where: condition,
-      attributes: ['id', 'name', 'email', 'BirthDate', 'createdAt', 'updatedAt'],
+      attributes: ['id', 'name', 'email', 'prefix', 'telephone', 'birthDate', 'createdAt', 'updatedAt'],
       limit, // Es lo mismo que escribir limit: limit
       offset,
       order: [['createdAt', 'DESC']]

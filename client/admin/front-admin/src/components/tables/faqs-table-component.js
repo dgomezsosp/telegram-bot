@@ -1,15 +1,14 @@
 import { store } from '../../redux/store.js'
 import { showFormElement } from '../../redux/crud-slice.js'
 
-class EventCategoryTable extends HTMLElement {
+class FaqsTable extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.endpoint = '/api/admin/event-categories'
+    this.endpoint = '/api/admin/faqs'
     this.filterQuery = null
     this.unsubscribe = null
   }
-  // Escuchar si está suscrito a los cambios del reduce ( cuando una variable cambia de valor ) y puede ver los estados de cualquier variables.
 
   async connectedCallback () {
     this.unsubscribe = store.subscribe(() => {
@@ -95,7 +94,7 @@ class EventCategoryTable extends HTMLElement {
 
       .table__header {
         display: flex;
-        justify-content: flex-start; /* Icono alineado a la izquierda */
+        justify-content: flex-start; 
         background-color: hsl(198, 100%, 85%);
         height: 30px;
         border-radius: 5px;
@@ -137,21 +136,21 @@ class EventCategoryTable extends HTMLElement {
       }
 
       .table__body::-webkit-scrollbar {
-        width: 8px; /* ancho del scrollbar */
+        width: 8px;
       }
 
       .table__body::-webkit-scrollbar-track {
-        background: #e0e0e0; /* color del fondo de la barra */
+        background: #e0e0e0; 
         border-radius: 10px;
       }
 
       .table__body::-webkit-scrollbar-thumb {
-        background: hsl(200, 77%, 42%); /* color azul del "pulgar" */
+        background: hsl(200, 77%, 42%);
         border-radius: 10px;
       }
 
       .table__body::-webkit-scrollbar-thumb:hover {
-        background: hsl(200, 77%, 32%); /* más oscuro al hacer hover */
+        background: hsl(200, 77%, 32%); 
       }
 
 
@@ -282,6 +281,7 @@ class EventCategoryTable extends HTMLElement {
     </section>
     
     `
+
     if (this.data.rows.length === 0) {
       const tableBody = this.shadow.querySelector('.table__body')
       const message = document.createElement('span')
@@ -324,13 +324,29 @@ class EventCategoryTable extends HTMLElement {
       const ul = document.createElement('ul')
       data.appendChild(ul)
 
-      const name = document.createElement('li')
-      const nameLabel = document.createElement('span')
-      nameLabel.textContent = 'Nombre: '
-      nameLabel.style.fontWeight = 'bold'
-      name.appendChild(nameLabel)
-      name.append(` ${element.name}`)
-      ul.appendChild(name)
+      const title = document.createElement('li')
+      const titleLabel = document.createElement('span')
+      titleLabel.textContent = 'Título: '
+      titleLabel.style.fontWeight = 'bold'
+      title.appendChild(titleLabel)
+      title.append(` ${element.title}`)
+      ul.appendChild(title)
+
+      const description = document.createElement('li')
+      const descriptionLabel = document.createElement('span')
+      descriptionLabel.textContent = 'Descripción: '
+      descriptionLabel.style.fontWeight = 'bold'
+      description.appendChild(descriptionLabel)
+      description.append(` ${element.description}`)
+      ul.appendChild(description)
+
+      const isActive = document.createElement('li')
+      const isActiveLabel = document.createElement('span')
+      isActiveLabel.textContent = 'Activo: '
+      isActiveLabel.style.fontWeight = 'bold'
+      isActive.appendChild(isActiveLabel)
+      isActive.append(` ${element.isActive}`)
+      ul.appendChild(isActive)
 
       const createdAt = document.createElement('li')
       const createdAtLabel = document.createElement('span')
@@ -417,4 +433,4 @@ class EventCategoryTable extends HTMLElement {
   }
 }
 
-customElements.define('event-categories-table-component', EventCategoryTable)
+customElements.define('faqs-table-component', FaqsTable)

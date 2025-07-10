@@ -1,15 +1,14 @@
 import { store } from '../../redux/store.js'
 import { showFormElement } from '../../redux/crud-slice.js'
 
-class EventCategoryTable extends HTMLElement {
+class CustomersTable extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.endpoint = '/api/admin/event-categories'
+    this.endpoint = '/api/admin/customers'
     this.filterQuery = null
     this.unsubscribe = null
   }
-  // Escuchar si está suscrito a los cambios del reduce ( cuando una variable cambia de valor ) y puede ver los estados de cualquier variables.
 
   async connectedCallback () {
     this.unsubscribe = store.subscribe(() => {
@@ -95,7 +94,7 @@ class EventCategoryTable extends HTMLElement {
 
       .table__header {
         display: flex;
-        justify-content: flex-start; /* Icono alineado a la izquierda */
+        justify-content: flex-start; 
         background-color: hsl(198, 100%, 85%);
         height: 30px;
         border-radius: 5px;
@@ -137,21 +136,21 @@ class EventCategoryTable extends HTMLElement {
       }
 
       .table__body::-webkit-scrollbar {
-        width: 8px; /* ancho del scrollbar */
+        width: 8px;
       }
 
       .table__body::-webkit-scrollbar-track {
-        background: #e0e0e0; /* color del fondo de la barra */
+        background: #e0e0e0; 
         border-radius: 10px;
       }
 
       .table__body::-webkit-scrollbar-thumb {
-        background: hsl(200, 77%, 42%); /* color azul del "pulgar" */
+        background: hsl(200, 77%, 42%);
         border-radius: 10px;
       }
 
       .table__body::-webkit-scrollbar-thumb:hover {
-        background: hsl(200, 77%, 32%); /* más oscuro al hacer hover */
+        background: hsl(200, 77%, 32%); 
       }
 
 
@@ -282,6 +281,7 @@ class EventCategoryTable extends HTMLElement {
     </section>
     
     `
+
     if (this.data.rows.length === 0) {
       const tableBody = this.shadow.querySelector('.table__body')
       const message = document.createElement('span')
@@ -331,6 +331,38 @@ class EventCategoryTable extends HTMLElement {
       name.appendChild(nameLabel)
       name.append(` ${element.name}`)
       ul.appendChild(name)
+
+      const email = document.createElement('li')
+      const emailLabel = document.createElement('span')
+      emailLabel.textContent = 'Email: '
+      emailLabel.style.fontWeight = 'bold'
+      email.appendChild(emailLabel)
+      email.append(` ${element.email}`)
+      ul.appendChild(email)
+
+      const prefix = document.createElement('li')
+      const prefixLabel = document.createElement('span')
+      prefixLabel.textContent = 'Prefijo telefónico: '
+      prefixLabel.style.fontWeight = 'bold'
+      prefix.appendChild(prefixLabel)
+      prefix.append(` ${element.prefix}`)
+      ul.appendChild(prefix)
+
+      const telephone = document.createElement('li')
+      const telephoneLabel = document.createElement('span')
+      telephoneLabel.textContent = 'Teléfono: '
+      telephoneLabel.style.fontWeight = 'bold'
+      telephone.appendChild(telephoneLabel)
+      telephone.append(` ${element.telephone}`)
+      ul.appendChild(telephone)
+
+      const birthDate = document.createElement('li')
+      const birthDateLabel = document.createElement('span')
+      birthDateLabel.textContent = 'Fecha de nacimiento: '
+      birthDateLabel.style.fontWeight = 'bold'
+      birthDate.appendChild(birthDateLabel)
+      birthDate.append(` ${element.birthDate}`)
+      ul.appendChild(birthDate)
 
       const createdAt = document.createElement('li')
       const createdAtLabel = document.createElement('span')
@@ -417,4 +449,4 @@ class EventCategoryTable extends HTMLElement {
   }
 }
 
-customElements.define('event-categories-table-component', EventCategoryTable)
+customElements.define('customers-table-component', CustomersTable)

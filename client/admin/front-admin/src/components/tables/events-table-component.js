@@ -1,15 +1,14 @@
 import { store } from '../../redux/store.js'
 import { showFormElement } from '../../redux/crud-slice.js'
 
-class EventCategoryTable extends HTMLElement {
+class EventsTable extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.endpoint = '/api/admin/event-categories'
+    this.endpoint = '/api/admin/events'
     this.filterQuery = null
     this.unsubscribe = null
   }
-  // Escuchar si está suscrito a los cambios del reduce ( cuando una variable cambia de valor ) y puede ver los estados de cualquier variables.
 
   async connectedCallback () {
     this.unsubscribe = store.subscribe(() => {
@@ -95,7 +94,7 @@ class EventCategoryTable extends HTMLElement {
 
       .table__header {
         display: flex;
-        justify-content: flex-start; /* Icono alineado a la izquierda */
+        justify-content: flex-start; 
         background-color: hsl(198, 100%, 85%);
         height: 30px;
         border-radius: 5px;
@@ -137,21 +136,21 @@ class EventCategoryTable extends HTMLElement {
       }
 
       .table__body::-webkit-scrollbar {
-        width: 8px; /* ancho del scrollbar */
+        width: 8px;
       }
 
       .table__body::-webkit-scrollbar-track {
-        background: #e0e0e0; /* color del fondo de la barra */
+        background: #e0e0e0; 
         border-radius: 10px;
       }
 
       .table__body::-webkit-scrollbar-thumb {
-        background: hsl(200, 77%, 42%); /* color azul del "pulgar" */
+        background: hsl(200, 77%, 42%);
         border-radius: 10px;
       }
 
       .table__body::-webkit-scrollbar-thumb:hover {
-        background: hsl(200, 77%, 32%); /* más oscuro al hacer hover */
+        background: hsl(200, 77%, 32%); 
       }
 
 
@@ -282,6 +281,7 @@ class EventCategoryTable extends HTMLElement {
     </section>
     
     `
+
     if (this.data.rows.length === 0) {
       const tableBody = this.shadow.querySelector('.table__body')
       const message = document.createElement('span')
@@ -324,13 +324,37 @@ class EventCategoryTable extends HTMLElement {
       const ul = document.createElement('ul')
       data.appendChild(ul)
 
-      const name = document.createElement('li')
-      const nameLabel = document.createElement('span')
-      nameLabel.textContent = 'Nombre: '
-      nameLabel.style.fontWeight = 'bold'
-      name.appendChild(nameLabel)
-      name.append(` ${element.name}`)
-      ul.appendChild(name)
+      const title = document.createElement('li')
+      const titleLabel = document.createElement('span')
+      titleLabel.textContent = 'Título: '
+      titleLabel.style.fontWeight = 'bold'
+      title.appendChild(titleLabel)
+      title.append(` ${element.title}`)
+      ul.appendChild(title)
+
+      const promotorId = document.createElement('li')
+      const promotorIdLabel = document.createElement('span')
+      promotorIdLabel.textContent = 'Promotor: '
+      promotorIdLabel.style.fontWeight = 'bold'
+      promotorId.appendChild(promotorIdLabel)
+      promotorId.append(` ${element.promotorId}`)
+      ul.appendChild(promotorId)
+
+      const townId = document.createElement('li')
+      const townIdLabel = document.createElement('span')
+      townIdLabel.textContent = 'Ciudad: '
+      townIdLabel.style.fontWeight = 'bold'
+      townId.appendChild(townIdLabel)
+      townId.append(` ${element.townId}`)
+      ul.appendChild(townId)
+
+      const categoryId = document.createElement('li')
+      const categoryIdLabel = document.createElement('span')
+      categoryIdLabel.textContent = 'Categoría: '
+      categoryIdLabel.style.fontWeight = 'bold'
+      categoryId.appendChild(categoryIdLabel)
+      categoryId.append(` ${element.categoryId}`)
+      ul.appendChild(categoryId)
 
       const createdAt = document.createElement('li')
       const createdAtLabel = document.createElement('span')
@@ -417,4 +441,4 @@ class EventCategoryTable extends HTMLElement {
   }
 }
 
-customElements.define('event-categories-table-component', EventCategoryTable)
+customElements.define('events-table-component', EventsTable)

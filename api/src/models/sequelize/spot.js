@@ -10,6 +10,14 @@ module.exports = function (sequelize, DataTypes) {
       townId: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, selecciona una "Ciudad".'
+          },
+          notEmpty: {
+            msg: 'Por favor, selecciona una "Ciudad".'
+          }
+        }
       },
       name: {
         type: DataTypes.STRING,
@@ -86,6 +94,14 @@ module.exports = function (sequelize, DataTypes) {
       isActive: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Por favor, selecciona si está "Activo".'
+          },
+          notEmpty: {
+            msg: 'Por favor, selecciona si está "Activo".'
+          }
+        }
       },
       createdAt: {
         type: DataTypes.DATE,

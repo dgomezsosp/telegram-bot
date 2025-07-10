@@ -9,7 +9,6 @@ class PromotersTable extends HTMLElement {
     this.filterQuery = null
     this.unsubscribe = null
   }
-  // Escuchar si está suscrito a los cambios del reduce ( cuando una variable cambia de valor ) y puede ver los estados de cualquier variables.
 
   async connectedCallback () {
     this.unsubscribe = store.subscribe(() => {

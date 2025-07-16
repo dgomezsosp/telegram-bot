@@ -200,34 +200,32 @@ class FaqsForm extends HTMLElement {
       .form-element-input input {
         width: 100%;
         padding: 10px;
+        border: 1px solid hsl(200, 77%, 35%);
         border-radius: 5px;
         box-sizing: border-box;
-        border: none;
         background: white;
         color: black;
-        /* Sombreado interior */
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
       .form-element-input select {
         width: 100%;
         padding: 10px;
+        border: 1px solid hsl(200, 77%, 35%);
         border-radius: 5px;
         box-sizing: border-box;
-        border: none;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        background: white;
+        color: black;
         cursor: pointer;
       }
 
       .form-element-input textarea {
         width: 100%;
         padding: 10px;
+        border: 1px solid hsl(200, 77%, 35%);
         border-radius: 5px;
         box-sizing: border-box;
-        border: none;
         background: white;
         color: black;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         resize: vertical;
         min-height: 80px;
         font-family: "Nunito Sans", serif;
@@ -239,9 +237,12 @@ class FaqsForm extends HTMLElement {
       }
 
       .form-element-input input:focus,
+      .form-element-input select:focus,
       .form-element-input textarea:focus {
         outline: none;
-        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
+        border-color: hsl(200, 77%, 35%);
+        box-shadow: 0 0 0 3px hsla(200, 77%, 35%, 0.3);
+        background-color: hsl(200, 77%, 98%);
       }
 
       .form-element-input .error{

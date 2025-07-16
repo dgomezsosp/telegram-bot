@@ -76,7 +76,7 @@ class PromotersForm extends HTMLElement {
 
       .form__header-box{
         display: flex;
-        justify-content: space-between; /* Alinea los elementos a los extremos */
+        justify-content: space-between; 
         align-items: center;
         background: hsl(198, 100%, 85%);
         border-radius: 5px;
@@ -178,8 +178,8 @@ class PromotersForm extends HTMLElement {
 
       .tab-content.active{
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
-        gap:1rem;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
       }
 
       .form-element {
@@ -200,21 +200,64 @@ class PromotersForm extends HTMLElement {
       .form-element-input input {
         width: 100%;
         padding: 10px;
+        border: 1px solid hsl(200, 77%, 35%);
         border-radius: 5px;
         box-sizing: border-box;
-        border: none;
         background: white;
         color: black;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
-      .form-element-input input:focus {
+      .form-element-input select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid hsl(200, 77%, 35%);
+        border-radius: 5px;
+        box-sizing: border-box;
+        background: white;
+        color: black;
+        cursor: pointer;
+      }
+
+      .form-element-input textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid hsl(200, 77%, 35%);
+        border-radius: 5px;
+        box-sizing: border-box;
+        background: white;
+        color: black;
+        resize: vertical;
+        min-height: 80px;
+        font-family: "Nunito Sans", serif;
+        font-optical-sizing: auto;
+      }
+
+      .form-element.full-width {
+        grid-column: 1 / -1; /
+      }
+
+      .form-element-input input:focus,
+      .form-element-input select:focus,
+      .form-element-input textarea:focus {
         outline: none;
-        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
+        border-color: hsl(200, 77%, 35%);
+        box-shadow: 0 0 0 3px hsla(200, 77%, 35%, 0.3);
+        background-color: hsl(200, 77%, 98%);
       }
 
       .form-element-input .error{
         border: 1px solid hsl(0, 51.90%, 54.30%);
+      }
+
+      .form-element-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        grid-column: 1 / -1; /* Ocupa todo el ancho */
+      }
+
+      .form-element-group .form-element-input input {
+        width: 100%;
       }
    
     </style>

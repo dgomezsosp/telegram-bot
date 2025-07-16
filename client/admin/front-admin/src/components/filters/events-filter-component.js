@@ -157,19 +157,27 @@ class EventsFilter extends HTMLElement {
             </div>
             <div class="filter-field">
               <label for="promotorId">Promotor:</label>
-              <select name="promotorId"></select>
+              <select name="promotorId">
+               <option value="" disabled selected>Selecciona una opción</option>
+              </select>
             </div>
             <div class="filter-field">
               <label for="townId">Ciudad:</label>
-              <select name="townId"></select>
+              <select name="townId">
+                <option value="" disabled selected>Selecciona una opción</option>
+              </select>
             </div>
             <div class="filter-field">
               <label for="spotId">Lugar:</label>
-              <select name="spotId"></select>
+              <select name="spotId">
+               <option value="" disabled selected>Selecciona una opción</option> 
+              </select>
             </div>
             <div class="filter-field">
               <label for="categoryId">Categoría:</label>
-              <select name="categoryId"></select>
+              <select name="categoryId">
+               <option value="" disabled selected>Selecciona una opción</option>
+              </select>
             </div>
           </form>
           <div class="filter-buttons">

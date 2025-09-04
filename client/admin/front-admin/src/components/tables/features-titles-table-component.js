@@ -1,14 +1,15 @@
 import { store } from '../../redux/store.js'
 import { showFormElement } from '../../redux/crud-slice.js'
 
-class FaqsTable extends HTMLElement {
+class FeaturesTitlesTable extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.endpoint = '/api/admin/faqs'
+    this.endpoint = '/api/admin/features-titles'
     this.filterQuery = null
     this.unsubscribe = null
   }
+  // Escuchar si está suscrito a los cambios del reduce ( cuando una variable cambia de valor ) y puede ver los estados de cualquier variables.
 
   async connectedCallback () {
     this.unsubscribe = store.subscribe(() => {
@@ -94,7 +95,7 @@ class FaqsTable extends HTMLElement {
 
       .table__header {
         display: flex;
-        justify-content: flex-start; 
+        justify-content: flex-start; /* Icono alineado a la izquierda */
         background-color: hsl(198, 100%, 85%);
         height: 30px;
         border-radius: 5px;
@@ -136,21 +137,21 @@ class FaqsTable extends HTMLElement {
       }
 
       .table__body::-webkit-scrollbar {
-        width: 8px;
+        width: 8px; /* ancho del scrollbar */
       }
 
       .table__body::-webkit-scrollbar-track {
-        background: #e0e0e0; 
+        background: #e0e0e0; /* color del fondo de la barra */
         border-radius: 10px;
       }
 
       .table__body::-webkit-scrollbar-thumb {
-        background: hsl(200, 77%, 42%);
+        background: hsl(200, 77%, 42%); /* color azul del "pulgar" */
         border-radius: 10px;
       }
 
       .table__body::-webkit-scrollbar-thumb:hover {
-        background: hsl(200, 77%, 32%); 
+        background: hsl(200, 77%, 32%); /* más oscuro al hacer hover */
       }
 
 
@@ -282,13 +283,6 @@ class FaqsTable extends HTMLElement {
     
     `
 
-    if (this.data.rows.length === 0) {
-      const tableBody = this.shadow.querySelector('.table__body')
-      const message = document.createElement('span')
-      message.textContent = 'No hay ningún registro'
-      tableBody.appendChild(message)
-    }
-
     this.data.rows.forEach(element => {
       const tableBody = this.shadow.querySelector('.table__body')
       const userBox = document.createElement('div')
@@ -324,29 +318,13 @@ class FaqsTable extends HTMLElement {
       const ul = document.createElement('ul')
       data.appendChild(ul)
 
-      const title = document.createElement('li')
-      const titleLabel = document.createElement('span')
-      titleLabel.textContent = 'Título: '
-      titleLabel.style.fontWeight = 'bold'
-      title.appendChild(titleLabel)
-      title.append(` ${element.title}`)
-      ul.appendChild(title)
-
-      // const description = document.createElement('li')
-      // const descriptionLabel = document.createElement('span')
-      // descriptionLabel.textContent = 'Descripción: '
-      // descriptionLabel.style.fontWeight = 'bold'
-      // description.appendChild(descriptionLabel)
-      // description.append(` ${element.description}`)
-      // ul.appendChild(description)
-
-      const isActive = document.createElement('li')
-      const isActiveLabel = document.createElement('span')
-      isActiveLabel.textContent = 'Activo: '
-      isActiveLabel.style.fontWeight = 'bold'
-      isActive.appendChild(isActiveLabel)
-      isActive.append(` ${element.isActive}`)
-      ul.appendChild(isActive)
+      const name = document.createElement('li')
+      const nameLabel = document.createElement('span')
+      nameLabel.textContent = 'Título característica: '
+      nameLabel.style.fontWeight = 'bold'
+      name.appendChild(nameLabel)
+      name.append(` ${element.title}`)
+      ul.appendChild(name)
 
       const createdAt = document.createElement('li')
       const createdAtLabel = document.createElement('span')
@@ -413,7 +391,7 @@ class FaqsTable extends HTMLElement {
       }
 
       if (event.target.closest('.filter-button')) {
-        document.dispatchEvent(new CustomEvent('showFilterModal', {
+        document.dispatchEvent(new CustomEvent('showUsersFilterModal', {
           detail: {
             endpoint: this.endpoint
           }
@@ -433,4 +411,4 @@ class FaqsTable extends HTMLElement {
   }
 }
 
-customElements.define('faqs-table-component', FaqsTable)
+customElements.define('features-titles-table-component', FeaturesTitlesTable)

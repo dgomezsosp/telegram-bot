@@ -11,21 +11,34 @@ class Faqs extends HTMLElement {
     await this.render()
   }
 
-  loadData () {
-    this.data = [
-      {
-        title: '¿Qué elementos principales se incluyen en el diseño de un sitio web personalizado?',
-        content: 'Lorem 2 ipsum dolor sit amet consectetur adipisicing elit. Dolores praesentium ratione itaque earum aperiam aliquam, error culpa fugiat ea corporis impedit. Ea illo et facilis nulla esse distinctio iste nesciunt.'
-      },
-      {
-        title: '¿Cuáles son los principios más importantes del diseño de sitios web?',
-        content: 'Lorem 3 ipsum dolor sit amet consectetur adipisicing elit. Dolores praesentium ratione itaque earum aperiam aliquam, error culpa fugiat ea corporis impedit. Ea illo et facilis nulla esse distinctio iste nesciunt.'
-      },
-      {
-        title: '¿Qué pasos incluye el proceso de diseño web profesional?',
-        content: 'Lorem 3 ipsum dolor sit amet consectetur adipisicing elit. Dolores praesentium ratione itaque earum aperiam aliquam, error culpa fugiat ea corporis impedit. Ea illo et facilis nulla esse distinctio iste nesciunt.'
+  async loadData () {
+    try {
+      const response = await fetch('/api/customer/faqs')
+
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`)
       }
-    ]
+
+      this.data = await response.json()
+    } catch (error) {
+      console.error('Error loading data:', error)
+      this.data = []
+    }
+
+    // this.data = [
+    //   {
+    //     title: '¿Qué elementos principales se incluyen en el diseño de un sitio web personalizado?',
+    //     content: 'Lorem 2 ipsum dolor sit amet consectetur adipisicing elit. Dolores praesentium ratione itaque earum aperiam aliquam, error culpa fugiat ea corporis impedit. Ea illo et facilis nulla esse distinctio iste nesciunt.'
+    //   },
+    //   {
+    //     title: '¿Cuáles son los principios más importantes del diseño de sitios web?',
+    //     content: 'Lorem 3 ipsum dolor sit amet consectetur adipisicing elit. Dolores praesentium ratione itaque earum aperiam aliquam, error culpa fugiat ea corporis impedit. Ea illo et facilis nulla esse distinctio iste nesciunt.'
+    //   },
+    //   {
+    //     title: '¿Qué pasos incluye el proceso de diseño web profesional?',
+    //     content: 'Lorem 3 ipsum dolor sit amet consectetur adipisicing elit. Dolores praesentium ratione itaque earum aperiam aliquam, error culpa fugiat ea corporis impedit. Ea illo et facilis nulla esse distinctio iste nesciunt.'
+    //   }
+    // ]
   }
 
   render () {
@@ -145,9 +158,9 @@ class Faqs extends HTMLElement {
                   <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                 </svg>`
 
-      const faqContent = document.createElement('p')
-      faqContent.textContent = faq.content
-      details.appendChild(faqContent)
+      const faqDescription = document.createElement('p')
+      faqDescription.textContent = faq.description
+      details.appendChild(faqDescription)
     })
   }
 }

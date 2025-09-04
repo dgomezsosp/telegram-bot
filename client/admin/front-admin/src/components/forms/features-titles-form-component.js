@@ -2,11 +2,11 @@ import isEqual from 'lodash-es/isEqual'
 import { store } from '../../redux/store.js'
 import { refreshTable } from '../../redux/crud-slice.js'
 
-class FaqsForm extends HTMLElement {
+class FeaturesTitlesForm extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.endpoint = '/api/admin/faqs'
+    this.endpoint = '/api/admin/features-titles'
     this.unsubscribe = null
     this.formElementData = null
   }
@@ -300,33 +300,13 @@ class FaqsForm extends HTMLElement {
             <div class="form-element-group">
               <div class="form-element">
                 <div class="form-title">
-                  <span>Título:</span>
+                  <span>Título característica:</span>
                 </div>
                 <div class="form-element-input">
-                  <input type="text" placeholder="Título" name="title">
+                  <input type="text" placeholder="Título característica" name="title">
                 </div>
               </div>
-            </div>
-            <div class="form-element full-width">
-              <div class="form-title">
-                <span>Descripción:</span>
-              </div>
-              <div class="form-element-input">
-                <textarea placeholder="Descripción..." name="description" rows="4"></textarea>
-              </div>
-            </div>
-            <div class="form-element">
-              <div class="form-title">
-                <span>Activo:</span>
-              </div>
-              <div class="form-element-input">
-                <select name="isActive">
-                  <option value="">Seleccionar...</option>
-                  <option value="1">Sí</option>
-                  <option value="0">No</option> 
-                </select>
-              </div>
-            </div>
+            </div>            
           </div>
           <div class="tab-content" data-tab="images">
             <div class="form-element">
@@ -473,4 +453,4 @@ class FaqsForm extends HTMLElement {
   }
 }
 
-customElements.define('faqs-form-component', FaqsForm)
+customElements.define('features-titles-form-component', FeaturesTitlesForm)

@@ -33,6 +33,7 @@ class PageComponent extends HTMLElement {
       '/admin/faqs': 'faqs.html',
       '/admin/idiomas': 'languages.html',
       '/admin/lugares': 'spots.html',
+      '/admin/titulos-caracteristicas': 'features-titles.html',
     }
     // guardar el filename correspondiente a la ruta de la url.
     const filename = routes[path] || '404.html'

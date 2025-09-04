@@ -22,5 +22,8 @@ router.use('/admin/event-occurrences', require('./admin/event-occurrences'))
 router.use('/admin/customers-events', require('./admin/customers-events'))
 router.use('/admin/customers-bots', require('./admin/customers-bots'))
 router.use('/admin/customer-bot-chats', require('./admin/customer-bot-chats'))
+router.use('/customer/faqs', require('./customer/faqs'))
+router.use('/admin/features-titles', require('./admin/features-titles'))
+router.use('/customer/features-titles', require('./customer/features-titles'))
 
 module.exports = router

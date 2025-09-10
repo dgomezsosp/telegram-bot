@@ -24,21 +24,6 @@ class Faqs extends HTMLElement {
       console.error('Error loading data:', error)
       this.data = []
     }
-
-    // this.data = [
-    //   {
-    //     title: '¿Qué elementos principales se incluyen en el diseño de un sitio web personalizado?',
-    //     content: 'Lorem 2 ipsum dolor sit amet consectetur adipisicing elit. Dolores praesentium ratione itaque earum aperiam aliquam, error culpa fugiat ea corporis impedit. Ea illo et facilis nulla esse distinctio iste nesciunt.'
-    //   },
-    //   {
-    //     title: '¿Cuáles son los principios más importantes del diseño de sitios web?',
-    //     content: 'Lorem 3 ipsum dolor sit amet consectetur adipisicing elit. Dolores praesentium ratione itaque earum aperiam aliquam, error culpa fugiat ea corporis impedit. Ea illo et facilis nulla esse distinctio iste nesciunt.'
-    //   },
-    //   {
-    //     title: '¿Qué pasos incluye el proceso de diseño web profesional?',
-    //     content: 'Lorem 3 ipsum dolor sit amet consectetur adipisicing elit. Dolores praesentium ratione itaque earum aperiam aliquam, error culpa fugiat ea corporis impedit. Ea illo et facilis nulla esse distinctio iste nesciunt.'
-    //   }
-    // ]
   }
 
   render () {

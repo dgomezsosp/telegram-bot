@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
+// Admin Routes
 router.use('/admin/users', require('./admin/users'))
 router.use('/admin/customers', require('./admin/customers'))
 router.use('/admin/bots', require('./admin/bots'))
@@ -22,8 +23,15 @@ router.use('/admin/event-occurrences', require('./admin/event-occurrences'))
 router.use('/admin/customers-events', require('./admin/customers-events'))
 router.use('/admin/customers-bots', require('./admin/customers-bots'))
 router.use('/admin/customer-bot-chats', require('./admin/customer-bot-chats'))
-router.use('/customer/faqs', require('./customer/faqs'))
+router.use('/admin/hero', require('./admin/hero'))
 router.use('/admin/features-titles', require('./admin/features-titles'))
+router.use('/admin/cards', require('./admin/cards'))
+router.use('/admin/subscription-forms', require('./admin/subscription-forms'))
+
+// Customer Routes
+router.use('/customer/faqs', require('./customer/faqs'))
 router.use('/customer/features-titles', require('./customer/features-titles'))
+router.use('/customer/hero', require('./customer/hero'))
+router.use('/customer/cards', require('./customer/cards'))
 
 module.exports = router

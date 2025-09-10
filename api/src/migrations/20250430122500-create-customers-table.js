@@ -10,26 +10,10 @@ module.exports = {
         autoIncrement: true,
         allowNull: false
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true
-      },
-      prefix: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      telephone: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      birthDate: {
-        type: Sequelize.DATEONLY,
-        allowNull: false
       },
       createdAt: {
         type: Sequelize.DATE,

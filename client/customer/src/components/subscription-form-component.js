@@ -2,6 +2,7 @@ class SubscriptionForm extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
+    this.endpoint = '/api/admin/form-emails'
     this.data = {}
   }
 
@@ -270,7 +271,7 @@ class SubscriptionForm extends HTMLElement {
         <form>
           <div class="form-element">
             <div class="form-element-input">
-              <input type="text" placeholder="Dirección de correo">
+              <input type="email" placeholder="Dirección de correo" name="email">
             </div>
           </div>
           <div class="form-element-button">
@@ -282,6 +283,80 @@ class SubscriptionForm extends HTMLElement {
   </section>
     
     `
+    this.renderButtons()
+  }
+
+  renderButtons () {
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault()
+      }
+    })
+    this.shadow.querySelector('.form').addEventListener('click', async event => {
+      event.preventDefault()
+
+      if (event.target.closest('.form-element-button')) {
+        const form = this.shadow.querySelector('form')
+        const formData = new FormData(form)
+        const formDataJson = {}
+
+        for (const [key, value] of formData.entries()) {
+          formDataJson[key] = value !== '' ? value : null
+        }
+
+        try {
+          const response = await fetch('/api/customer/customers', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formDataJson)
+          })
+
+          if (!response.ok) {
+            throw response
+          }
+
+          this.closeValidationErrors()
+
+          // store.dispatch(refreshTable(this.endpoint))
+          this.resetForm()
+
+          document.dispatchEvent(new CustomEvent('notice', {
+            detail: {
+              message: 'Datos guardados correctamente',
+              type: 'success'
+            }
+          }))
+        } catch (error) {
+          if (error.status === 422) {
+            alert('hola')
+            const data = await error.json()
+            this.validationErrors(data.message)
+
+            document.dispatchEvent(new CustomEvent('notice', {
+              detail: {
+                message: 'Hay errores de validación en los datos',
+                type: 'error'
+              }
+            }))
+          }
+
+          if (error.status === 500) {
+            document.dispatchEvent(new CustomEvent('notice', {
+              detail: {
+                message: 'No se han podido guardar los datos',
+                type: 'error'
+              }
+            }))
+          }
+        }
+      }
+
+      if (event.target.closest('.close-validation-errors')) {
+        this.closeValidationErrors()
+      }
+    })
   }
 }
 

@@ -11,8 +11,6 @@ class Cards extends HTMLElement {
 
   async loadData () {
     try {
-      const nameAttr = this.getAttribute('name')
-      console.log('Atributo name en cards-component:', nameAttr)
       const response = await fetch(`/api/customer/cards/${this.getAttribute('name')}`)
 
       if (!response.ok) {

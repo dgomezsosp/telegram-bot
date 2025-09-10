@@ -36,7 +36,7 @@ class PageComponent extends HTMLElement {
       '/admin/titulos-caracteristicas': 'features-titles.html',
       '/admin/hero': 'hero.html',
       '/admin/cards': 'cards.html',
-      '/admin/formularios': 'subscription-forms.html'
+      '/admin/formularios': 'subscription-forms.html',
     }
     // guardar el filename correspondiente a la ruta de la url.
     const filename = routes[path] || '404.html'

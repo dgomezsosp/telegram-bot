@@ -19,139 +19,6 @@ class BotChat extends HTMLElement {
     ]
   }
 
-  setupEventListeners () {
-    const messageInput = this.shadow.querySelector('.message-input')
-    const sendButton = this.shadow.querySelector('.send-button')
-    const chatCollapsed = this.shadow.querySelector('.chat-collapsed')
-    const closeButton = this.shadow.querySelector('.close-button')
-
-    // Toggle chat
-    const toggleChat = () => {
-      this.isOpen = !this.isOpen
-      const chatContainer = this.shadow.querySelector('.chat-container')
-      const chatCollapsedElement = this.shadow.querySelector('.chat-collapsed')
-
-      if (this.isOpen) {
-        chatContainer.style.display = 'flex'
-        chatCollapsedElement.style.display = 'none'
-      } else {
-        chatContainer.style.display = 'none'
-        chatCollapsedElement.style.display = 'flex'
-      }
-    }
-
-    const sendMessage = async () => {
-      const message = messageInput.value.trim()
-      if (message) {
-        this.addMessage(message, 'user')
-        messageInput.value = ''
-
-        // Esperar 1 segundo antes de mostrar "Escribiendo..."
-        setTimeout(async () => {
-          this.showTypingIndicator()
-
-          try {
-            await this.postMessage(message)
-          } finally {
-            this.hideTypingIndicator()
-          }
-        }, 1000)
-      }
-    }
-
-    chatCollapsed.addEventListener('click', toggleChat)
-    closeButton.addEventListener('click', toggleChat)
-    sendButton.addEventListener('click', sendMessage)
-    messageInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        sendMessage()
-      }
-    })
-  }
-
-  addMessage (text, sender) {
-    const messagesContainer = this.shadow.querySelector('.messages')
-    const messageElement = document.createElement('li')
-    messageElement.classList.add('message', sender === 'bot' ? 'left' : 'right')
-    messageElement.innerHTML = `
-      <div class="msg">
-        <p>${text}</p>
-        <time>${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>
-      </div>
-    `
-    messagesContainer.appendChild(messageElement)
-    messagesContainer.scrollTop = messagesContainer.scrollHeight
-  }
-
-  async postMessage (userMessage) {
-    const chatDataJson = {
-      prompt: userMessage,
-      threadId: this.threadId
-    }
-    try {
-      const response = await fetch('/api/customer/chats', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(chatDataJson)
-      })
-
-      if (!response.ok) {
-        throw response
-      }
-
-      const data = await response.json()
-
-      this.threadId = data.threadId
-      this.addMessage(data.answer.text, 'bot')
-
-      this.closeValidationErrors?.()
-      this.resetForm?.()
-    } catch (error) {
-      if (error.status === 422) {
-        const data = await error.json()
-        this.validationErrors?.(data.message)
-
-        document.dispatchEvent(new CustomEvent('notice', {
-          detail: {
-            message: 'Hay errores de validación en los datos',
-            type: 'error'
-          }
-        }))
-      }
-
-      if (error.status === 500) {
-        document.dispatchEvent(new CustomEvent('notice', {
-          detail: {
-            message: 'No se han podido guardar los datos',
-            type: 'error'
-          }
-        }))
-      }
-    }
-  }
-
-  showTypingIndicator () {
-    const messagesContainer = this.shadow.querySelector('.messages')
-    const typingElement = document.createElement('li')
-    typingElement.classList.add('message', 'left', 'typing-indicator')
-    typingElement.innerHTML = `
-      <div class="msg typing">
-        <p>Escribiendo...</p>
-      </div>
-    `
-    messagesContainer.appendChild(typingElement)
-    messagesContainer.scrollTop = messagesContainer.scrollHeight
-  }
-
-  hideTypingIndicator () {
-    const typingIndicator = this.shadow.querySelector('.typing-indicator')
-    if (typingIndicator) {
-      typingIndicator.remove()
-    }
-  }
-
   render () {
     this.shadow.innerHTML =
     /* html */
@@ -423,6 +290,140 @@ class BotChat extends HTMLElement {
     this.data.forEach(msg => {
       this.addMessage(msg.message, msg.sender)
     })
+  }
+
+  setupEventListeners () {
+    const messageInput = this.shadow.querySelector('.message-input')
+    const sendButton = this.shadow.querySelector('.send-button')
+    const chatCollapsed = this.shadow.querySelector('.chat-collapsed')
+    const closeButton = this.shadow.querySelector('.close-button')
+
+    // Toggle chat
+    const toggleChat = () => {
+      this.isOpen = !this.isOpen
+      const chatContainer = this.shadow.querySelector('.chat-container')
+      const chatCollapsedElement = this.shadow.querySelector('.chat-collapsed')
+
+      if (this.isOpen) {
+        chatContainer.style.display = 'flex'
+        chatCollapsedElement.style.display = 'none'
+      } else {
+        chatContainer.style.display = 'none'
+        chatCollapsedElement.style.display = 'flex'
+      }
+    }
+
+    const sendMessage = async () => {
+      const message = messageInput.value.trim()
+      if (message) {
+        this.addMessage(message, 'user')
+        messageInput.value = ''
+
+        // Esperar 1 segundo antes de mostrar "Escribiendo..."
+        setTimeout(async () => {
+          this.showTypingIndicator()
+
+          try {
+            await this.postAnswer(message)
+          } finally {
+            this.hideTypingIndicator()
+          }
+        }, 1000)
+      }
+    }
+
+    chatCollapsed.addEventListener('click', toggleChat)
+    closeButton.addEventListener('click', toggleChat)
+    sendButton.addEventListener('click', sendMessage)
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage()
+      }
+    })
+  }
+
+  addMessage (text, sender) {
+    const messagesContainer = this.shadow.querySelector('.messages')
+    const messageElement = document.createElement('li')
+    messageElement.classList.add('message', sender === 'bot' ? 'left' : 'right')
+    messageElement.innerHTML = `
+      <div class="msg">
+        <p>${text}</p>
+        <time>${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>
+      </div>
+    `
+    messagesContainer.appendChild(messageElement)
+    messagesContainer.scrollTop = messagesContainer.scrollHeight
+  }
+
+  async postAnswer (userMessage) {
+    const chatDataJson = {
+      prompt: userMessage,
+      threadId: this.threadId
+    }
+    try {
+      const response = await fetch('/api/customer/chats', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(chatDataJson)
+      })
+
+      if (!response.ok) {
+        throw response
+      }
+
+      const data = await response.json()
+
+      this.threadId = data.threadId
+      this.addMessage(data.answer.text, 'bot')
+      console.log(chatDataJson.threadId)
+
+      this.closeValidationErrors?.()
+      this.resetForm?.()
+    } catch (error) {
+      if (error.status === 422) {
+        const data = await error.json()
+        this.validationErrors?.(data.message)
+
+        document.dispatchEvent(new CustomEvent('notice', {
+          detail: {
+            message: 'Hay errores de validación en los datos',
+            type: 'error'
+          }
+        }))
+      }
+
+      if (error.status === 500) {
+        document.dispatchEvent(new CustomEvent('notice', {
+          detail: {
+            message: 'No se han podido guardar los datos',
+            type: 'error'
+          }
+        }))
+      }
+    }
+  }
+
+  showTypingIndicator () {
+    const messagesContainer = this.shadow.querySelector('.messages')
+    const typingElement = document.createElement('li')
+    typingElement.classList.add('message', 'left', 'typing-indicator')
+    typingElement.innerHTML = `
+      <div class="msg typing">
+        <p>Escribiendo...</p>
+      </div>
+    `
+    messagesContainer.appendChild(typingElement)
+    messagesContainer.scrollTop = messagesContainer.scrollHeight
+  }
+
+  hideTypingIndicator () {
+    const typingIndicator = this.shadow.querySelector('.typing-indicator')
+    if (typingIndicator) {
+      typingIndicator.remove()
+    }
   }
 }
 

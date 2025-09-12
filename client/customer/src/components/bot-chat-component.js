@@ -40,15 +40,21 @@ class BotChat extends HTMLElement {
       }
     }
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
       const message = messageInput.value.trim()
       if (message) {
         this.addMessage(message, 'user')
         messageInput.value = ''
 
-        // Simular respuesta del bot después de un momento
-        setTimeout(() => {
-          this.addMessage('Gracias por tu mensaje. ¿Hay algo más en lo que pueda ayudarte?', 'bot')
+        // Esperar 1 segundo antes de mostrar "Escribiendo..."
+        setTimeout(async () => {
+          this.showTypingIndicator()
+
+          try {
+            await this.postMessage(message)
+          } finally {
+            this.hideTypingIndicator()
+          }
         }, 1000)
       }
     }
@@ -75,6 +81,75 @@ class BotChat extends HTMLElement {
     `
     messagesContainer.appendChild(messageElement)
     messagesContainer.scrollTop = messagesContainer.scrollHeight
+  }
+
+  async postMessage (userMessage) {
+    const chatDataJson = {
+      prompt: userMessage,
+      threadId: this.threadId
+    }
+    try {
+      const response = await fetch('/api/customer/chats', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(chatDataJson)
+      })
+
+      if (!response.ok) {
+        throw response
+      }
+
+      const data = await response.json()
+
+      this.threadId = data.threadId
+      this.addMessage(data.answer.text, 'bot')
+
+      this.closeValidationErrors?.()
+      this.resetForm?.()
+    } catch (error) {
+      if (error.status === 422) {
+        const data = await error.json()
+        this.validationErrors?.(data.message)
+
+        document.dispatchEvent(new CustomEvent('notice', {
+          detail: {
+            message: 'Hay errores de validación en los datos',
+            type: 'error'
+          }
+        }))
+      }
+
+      if (error.status === 500) {
+        document.dispatchEvent(new CustomEvent('notice', {
+          detail: {
+            message: 'No se han podido guardar los datos',
+            type: 'error'
+          }
+        }))
+      }
+    }
+  }
+
+  showTypingIndicator () {
+    const messagesContainer = this.shadow.querySelector('.messages')
+    const typingElement = document.createElement('li')
+    typingElement.classList.add('message', 'left', 'typing-indicator')
+    typingElement.innerHTML = `
+      <div class="msg typing">
+        <p>Escribiendo...</p>
+      </div>
+    `
+    messagesContainer.appendChild(typingElement)
+    messagesContainer.scrollTop = messagesContainer.scrollHeight
+  }
+
+  hideTypingIndicator () {
+    const typingIndicator = this.shadow.querySelector('.typing-indicator')
+    if (typingIndicator) {
+      typingIndicator.remove()
+    }
   }
 
   render () {

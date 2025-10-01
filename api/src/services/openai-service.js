@@ -3,14 +3,16 @@ const OpenAI = require('openai')
 module.exports = class OpenAIService {
   constructor () {
     this.openai = new OpenAI({
+      // Clave api del asistente
       apiKey: process.env.OPENAI_API_KEY
     })
-    this.assistantEndpoint = null
-    this.threadId = null
+    this.assistantEndpoint = null // Endpoint del asistente
+    this.threadId = null // ID del hilo que se crea.
     this.messages = null
     this.answer = null
   }
 
+  // Te devuelve los 20 primeros asistentes que has creado
   async getAssistants () {
     const myAssistants = await this.openai.beta.assistants.list({
       order: 'desc',
@@ -20,10 +22,12 @@ module.exports = class OpenAIService {
     return myAssistants.data
   }
 
+  // Setter. Función para dar valor a una variable
   async setAssistant (assistantEndpoint) {
     this.assistantEndpoint = assistantEndpoint
   }
 
+  // Crear una conversación nueva. Devuelve la id de la conversación que se ha creado.
   async createThread () {
     try {
       const thread = await this.openai.beta.threads.create()
@@ -33,12 +37,14 @@ module.exports = class OpenAIService {
     }
   }
 
+  // Asignar ID del hilo.
   setThread (theadId) {
     this.threadId = theadId
   }
 
   async createMessage (prompt) {
     try {
+      // Se crea el mensaje de la conversación.
       await this.openai.beta.threads.messages.create(
         this.threadId,
         {
@@ -46,7 +52,12 @@ module.exports = class OpenAIService {
           content: prompt
         }
       )
+      // Se lanza la run
+      // Cuando se envía un mensaje se genera un run por cada asistente e hilo. Como tarda en contestar, cada 2 segundos consulta el run, que pueden ser 4 estado (queued, completed, in_progress, se dispara una function)
+      // Si está queued / in_progess consulto run cada 2 seg.
+      // Si se ejecuta una función, le doy la resupuesta de esa función y openai da la respuesta que debe dar a esa función.
 
+      // Crear conversación/asistente, crear mensaje, consultar Rrun
       this.run = await this.openai.beta.threads.runs.createAndPoll(
         this.threadId,
         {
@@ -62,9 +73,12 @@ module.exports = class OpenAIService {
     try {
       console.log(this.run.status)
 
+      // Tomar el útlimo mensaje de la conversación.
       if (this.run.status === 'completed') {
+        // Toma todos los mensajes de la conversación.
         const messages = await this.openai.beta.threads.messages.list(this.run.thread_id)
         this.messages = messages.data
+        // Coge el último mensaje.
         this.answer = this.messages[0].content[0].text.value
         return
       }
@@ -78,6 +92,7 @@ module.exports = class OpenAIService {
         return
       }
 
+      // Si aun no está completo, se llama a sí mismo.
       if (this.run.status === 'queued' || this.run.status === 'in_progress') {
         await this.sleep(2000)
 
@@ -95,6 +110,7 @@ module.exports = class OpenAIService {
     }
   }
 
+  // Se le da la respuesta de la función a OpenAI, OpenAI se ponen a generar nueva respuesta y vuelve a consultar el run.
   async submitToolOutputs (toolOutputs) {
     try {
       this.run = await this.openai.beta.threads.runs.submitToolOutputs(

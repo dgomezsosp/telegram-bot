@@ -428,7 +428,7 @@ class ChatBot extends HTMLElement {
     chatButton.addEventListener('click', () => this.toggleChat())
     closeButton.addEventListener('click', () => this.closeChat())
     sendButton.addEventListener('click', () => this.sendMessage())
-    chatInput.addEventListener('keypress', (e) => {
+    chatInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         this.sendMessage()
       }

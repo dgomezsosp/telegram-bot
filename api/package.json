@@ -29,6 +29,8 @@
     "sequelize-cli": "^6.6.2"
   },
   "dependencies": {
+    "@chroma-core/default-embed": "^0.1.8",
+    "chromadb": "^3.0.17",
     "connect-mongo": "^5.1.0",
     "express": "^5.1.0",
     "moment": "^2.30.1",

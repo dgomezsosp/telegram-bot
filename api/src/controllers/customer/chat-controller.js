@@ -71,7 +71,7 @@ exports.assistantResponse = async (req, res) => {
         }
 
         if (tool.function.name === 'search_product') {
-          const response = this.searchProduct(data.userQuestion)
+          const response = await this.searchProduct(data.userQuestion)
 
           toolsOutputs.push({
             tool_call_id: tool.id,
@@ -137,6 +137,7 @@ exports.escalateToHumanNoAnswer = (req, conversationContext, threadId) => {
 }
 
 exports.searchProduct = async (userQuestion) => {
+  console.log('Estoy en searchProduct()')
   const collection = await client.getOrCreateCollection({
     name: 'products'
   })

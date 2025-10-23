@@ -1,6 +1,7 @@
 const { ChromaClient } = require('chromadb')
 const client = new ChromaClient()
 
+// Función para buscar en la base de datos de vectores resultados a partir de lo que escribe el usuario en el buscador del componente search-bar-component.
 exports.searchProducts = async (req, res) => {
   try {
     const collection = await client.getOrCreateCollection({

@@ -132,7 +132,7 @@ class ChatBot extends HTMLElement {
         .product-title a { color: #fff;}
         .message { display: flex; flex-direction: column; gap: .5rem; width: 100%; }
         .message h3 { font-size: .9rem; margin: 0; color: #fff; }
-        .message p { font-size: 1rem; margin: 0; color: #fff; line-height: 1.4; }
+        .message p { font-size: 1rem; margin: 0; color: #fff; line-height: 1.4; white-space: pre-wrap; }
 
         .avatar {
           align-items: center; border: 1px solid hsl(0,0%,40%); border-radius: 50%;
@@ -511,7 +511,7 @@ class ChatBot extends HTMLElement {
     if (this.socketReady && this.escalateToHuman) {
       this.wsSubscribe(this.threadId)
     }
-
+    console.log(data.answer)
     return data.answer
   }
 

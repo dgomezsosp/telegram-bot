@@ -22,13 +22,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      sentAt: {
-        type: Sequelize.DATE,
-        allowNull: false
+      sendAt: {
+        type: Sequelize.DATE
       },
       readedAt: {
-        type: Sequelize.DATE,
-        allowNull: false
+        type: Sequelize.DATE
       },
       uuid: {
         type: Sequelize.STRING,

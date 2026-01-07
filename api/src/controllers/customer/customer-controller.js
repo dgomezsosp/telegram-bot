@@ -1,14 +1,11 @@
+// Se puede sustituir 'User' por 'sequelizeModel' y así es más genérico pero no tan bonito para la lectura
 const sequelizeDb = require('../../models/sequelize')
-const CustomerSQL = sequelizeDb.Customer
-const mongooseDb = require('../../models/mongoose')
-const CustomerMongoose = mongooseDb.Customer
+const Customer = sequelizeDb.Customer
 
 exports.create = async (req, res, next) => {
   try {
-    console.log(req.body)
-    const data = await CustomerSQL.create(req.body)
-    await CustomerMongoose.create(req.body)
-
+    const data = await Customer.create(req.body)
+    req.redisClient.publish('new-customer', JSON.stringify(data))
     res.status(200).send(data)
   } catch (err) {
     if (err.name === 'SequelizeValidationError') {

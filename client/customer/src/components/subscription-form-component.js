@@ -1,17 +1,17 @@
 class SubscriptionForm extends HTMLElement {
-  constructor () {
+  constructor() {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
     this.endpoint = '/api/admin/form-emails'
     this.data = {}
   }
 
-  async connectedCallback () {
+  async connectedCallback() {
     await this.loadData()
     await this.render()
   }
 
-  loadData () {
+  loadData() {
     this.data = {
       explanationTitle: 'Este es un título muy chulo',
       explanationInfo: 'esta es una descripción ultra super mega guay chula chiripitiflautica',
@@ -22,7 +22,7 @@ class SubscriptionForm extends HTMLElement {
     }
   }
 
-  render () {
+  render() {
     this.shadow.innerHTML =
     /* html */`
     <style>
@@ -271,6 +271,7 @@ class SubscriptionForm extends HTMLElement {
         <form>
           <div class="form-element">
             <div class="form-element-input">
+              <input type="text" placeholder="Nombre" name="name">
               <input type="email" placeholder="Dirección de correo" name="email">
             </div>
           </div>
@@ -286,7 +287,7 @@ class SubscriptionForm extends HTMLElement {
     this.renderButtons()
   }
 
-  renderButtons () {
+  renderButtons() {
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Enter') {
         event.preventDefault()

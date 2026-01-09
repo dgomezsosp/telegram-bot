@@ -5,12 +5,12 @@ const app = express();
 
 const options = {
   // 
-  target: 'http://127.0.0.1:8080', 
+  target: 'http://127.0.0.1:8080',
   //nombre del dominio. se suele poner dev-nombreDominio
-  cookieDomainRewrite: 'dev-youthing.com', 
+  cookieDomainRewrite: 'dev-youthing.com',
   changeOrigin: true,
   logLevel: 'debug',
-  onProxyReq: function(proxyReq, req, res) {
+  onProxyReq: function (proxyReq, req, res) {
     if (!req.headers['accept-language']) {
       proxyReq.setHeader('Accept-Language', 'es-ES,es;q=0.9,en;q=0.8');
     } else {
@@ -25,6 +25,9 @@ app.use('/api', createProxyMiddleware(options));
 //cuando alguien escribe /admin, se le redirige a la máquina de ese target (la que se carga con npm run dev del package json y vite.config.js)
 options.target = 'http://localhost:5171';
 app.use('/admin', createProxyMiddleware(options));
+
+options.target = 'http://localhost:5178';
+app.use('/cuenta', createProxyMiddleware(options));
 
 options.target = 'http://localhost:5177';
 app.use('/', createProxyMiddleware(options));

@@ -57,7 +57,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       createdAt: {
         type: DataTypes.DATE,
-        get () {
+        get() {
           return this.getDataValue('createdAt')
             ? this.getDataValue('createdAt').toISOString().split('T')[0]
             : null
@@ -65,28 +65,28 @@ module.exports = function (sequelize, DataTypes) {
       },
       updatedAt: {
         type: DataTypes.DATE,
-        get () {
+        get() {
           return this.getDataValue('updatedAt')
             ? this.getDataValue('updatedAt').toISOString().split('T')[0]
             : null
         }
       }
     }, { // opciones del modelo
-      sequelize,
-      tableName: 'user-activation-tokens',
-      timestamps: true,
-      paranoid: true, // no borres datos
-      indexes: [
-        {
-          name: 'PRIMARY',
-          unique: true,
-          using: 'BTREE',
-          fields: [
-            { name: 'id' }
-          ]
-        }
-      ]
-    }
+    sequelize,
+    tableName: 'user_activation_tokens',
+    timestamps: true,
+    paranoid: true, // no borres datos
+    indexes: [
+      {
+        name: 'PRIMARY',
+        unique: true,
+        using: 'BTREE',
+        fields: [
+          { name: 'id' }
+        ]
+      }
+    ]
+  }
   )
 
   Model.associate = function (models) {

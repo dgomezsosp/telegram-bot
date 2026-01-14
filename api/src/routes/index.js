@@ -38,4 +38,6 @@ router.use('/customer/chats', require('./customer/chats'))
 router.use('/customer/products', require('./customer/products'))
 router.use('/customer/customers', require('./customer/customers'))
 
+router.use('/auth', require('./auth/auth-activates'))
+
 module.exports = router

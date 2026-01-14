@@ -1,14 +1,14 @@
 class ActivationComponent extends HTMLElement {
-  constructor() {
+  constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
   }
 
-  connectedCallback() {
+  connectedCallback () {
     this.render()
   }
 
-  render() {
+  render () {
     this.shadow.innerHTML =
     /* html */`
     <style>
@@ -118,18 +118,7 @@ class ActivationComponent extends HTMLElement {
         
         <form class="login-form">
           <div class="form-group">
-            <label class="form-label" for="username">Usuario</label>
-            <input 
-              class="form-input" 
-              type="text" 
-              id="username" 
-              name="username"
-              placeholder="Ingresa tu usuario"
-            >
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="password">Contraseña</label>
+            <label class="form-label" name="password">Contraseña</label>
             <input 
               class="form-input" 
               type="password" 
@@ -139,14 +128,72 @@ class ActivationComponent extends HTMLElement {
             >
           </div>
 
+          <div class="form-group">
+            <label class="form-label" name="repeat-password">Repetir Contraseña</label>
+            <input 
+              class="form-input" 
+              type="password" 
+              id="confirm-password" 
+              name="repeat-password"
+              placeholder="Repite tu contraseña"
+            >
+          </div>
+
           <button class="login-button" type="submit">
-            Iniciar Sesión
+            Crear contraseña
           </button>
+
+          <div class="message">
+            <span></span>
+          </div>
         </form>
       </div>
     </div>
     
     `
+
+    this.shadow.querySelector('form').addEventListener('submit', async (event) => {
+      event.preventDefault()
+      console.log('hola')
+      const password = this.shadow.querySelector('input[name="password"]').value
+      const repeatPassword = this.shadow.querySelector('input[name="repeat-password"]').value
+      const regex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/
+
+      if (password !== repeatPassword) {
+        this.shadow.querySelector('.message span').textContent = 'Las contraseñas no coinciden'
+        return
+      }
+
+      if (!password || !repeatPassword) {
+        this.shadow.querySelector('.message span').textContent = 'Los campos no pueden estar vacios'
+        return
+      }
+
+      if (!regex.test(password)) {
+        this.shadow.querySelector('.message span').textContent = 'La contraseña no cumple con los requisitos mínimos'
+        return
+      }
+
+      const urlParams = new URLSearchParams(window.location.search)
+      const token = urlParams.get('token')
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/activate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ token, password })
+      })
+
+      if (response.ok) {
+        this.shadow.querySelector('.message span').textContent = 'Cuenta activada correctamente'
+        const form = this.shadow.querySelector('.form')
+        form.reset()
+      } else {
+        const data = await response.json()
+        this.shadow.querySelector('.message span').textContent = data.message
+      }
+    })
   }
 }
 

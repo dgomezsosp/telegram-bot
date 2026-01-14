@@ -5,19 +5,22 @@
         "ws": "^8.18.3"
     },
     "scripts": {
-        "dev": "npm-run-all --parallel dev:front-admin dev:front-customer dev:front-auth proxy",
+        "dev": "npm-run-all --parallel dev:front-admin dev:front-customer dev:front-auth dev:front-auth-admin proxy",
         "dev:front-admin": "cd client/admin/front-admin && npm run dev",
         "dev:front-customer": "cd client/customer && npm run dev",
         "dev:front-auth": "cd client/auth && npm run dev",
-        "install": "npm-run-all --parallel install:front-admin install:front-customer install:front-auth",
+        "dev:front-auth-admin": "cd client/admin/auth-admin && npm run dev",
+        "install": "npm-run-all --parallel install:front-admin install:front-customer install:front-auth install:front-auth-admin",
         "install:front-admin": "cd client/admin/front-admin && npm install",
         "install:front-customer": "cd client/customer && npm install",
         "install:front-auth": "cd client/auth && npm install",
+        "install:front-auth-admin": "cd client/admin/auth-admin && npm install",
         "proxy": "node ./proxy.js",
-        "start": "npm-run-all --parallel start:front-admin start:front-customer start:front-auth",
+        "start": "npm-run-all --parallel start:front-admin start:front-customer start:front-auth start:front-auth-admin",
         "start:front-admin": "cd client/admin/front-admin && npm run dev",
         "start:front-customer": "cd client/customer && npm run dev",
-        "start:front-auth": "cd client/auth && npm run dev"
+        "start:front-auth": "cd client/auth && npm run dev",
+        "start:front-auth-admin": "cd client/admin/auth-admin && npm run dev"
     },
     "devDependencies": {
         "npm-run-all": "^4.1.5"

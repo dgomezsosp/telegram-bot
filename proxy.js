@@ -22,6 +22,9 @@ const options = {
 // Se carga todo lo de la api. 
 app.use('/api', createProxyMiddleware(options));
 
+options.target = 'http://localhost:5172';
+app.use('/admin/login', createProxyMiddleware(options));
+
 //cuando alguien escribe /admin, se le redirige a la máquina de ese target (la que se carga con npm run dev del package json y vite.config.js)
 options.target = 'http://localhost:5171';
 app.use('/admin', createProxyMiddleware(options));

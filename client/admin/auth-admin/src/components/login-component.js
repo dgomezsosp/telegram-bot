@@ -5,6 +5,7 @@ class LoginComponent extends HTMLElement {
   }
 
   connectedCallback() {
+    this.checkSignin()
     this.render()
   }
 
@@ -147,6 +148,52 @@ class LoginComponent extends HTMLElement {
     </div>
     
     `
+
+    const form = this.shadow.querySelector('form')
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      const formData = new FormData(form)
+      const formDataJson = Object.fromEntries(formData.entries())
+
+      try {
+        const result = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/user/signin`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formDataJson)
+        })
+
+        if (result.ok) {
+          const data = await result.json()
+          window.location.href = data.redirection
+        } else {
+          const error = await result.json()
+          console.log(error.message)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    })
+  }
+
+  async checkSignin() {
+
+    try {
+      const result = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/user/check-signin`, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (result.ok) {
+        const data = await result.json()
+        window.location.href = data.redirection
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 

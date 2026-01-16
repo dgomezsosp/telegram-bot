@@ -17,7 +17,7 @@ class Topbar extends HTMLElement {
       loginButton.addEventListener('click', (e) => {
         console.log('Button clicked!')
         e.preventDefault()
-        window.location.href = 'http://dev-youthing.com/admin/login'
+        window.location.href = 'http://dev-youthing.com/login-customer'
       })
     }
   }

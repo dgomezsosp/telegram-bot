@@ -1,4 +1,5 @@
 import './components/header-component.js'
+import './components/admin-dashboard-component.js'
 import './components/title-component.js'
 import './components/menu-component.js'
 import './components/main-component.js'

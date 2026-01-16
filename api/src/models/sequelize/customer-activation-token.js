@@ -7,15 +7,15 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
         allowNull: false
       },
-      CustomerId: {
+      customerId: {  // ← CAMBIO: ahora con c minúscula
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
           notNull: {
-            msg: 'Por favor, rellena el campo "userId".'
+            msg: 'Por favor, rellena el campo "customerId".'
           },
           notEmpty: {
-            msg: 'Por favor, rellena el campo "userId".'
+            msg: 'Por favor, rellena el campo "customerId".'
           }
         }
       },
@@ -57,7 +57,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       createdAt: {
         type: DataTypes.DATE,
-        get () {
+        get() {
           return this.getDataValue('createdAt')
             ? this.getDataValue('createdAt').toISOString().split('T')[0]
             : null
@@ -65,28 +65,28 @@ module.exports = function (sequelize, DataTypes) {
       },
       updatedAt: {
         type: DataTypes.DATE,
-        get () {
+        get() {
           return this.getDataValue('updatedAt')
             ? this.getDataValue('updatedAt').toISOString().split('T')[0]
             : null
         }
       }
     }, { // opciones del modelo
-      sequelize,
-      tableName: 'customer-activation-tokens',
-      timestamps: true,
-      paranoid: true, // no borres datos
-      indexes: [
-        {
-          name: 'PRIMARY',
-          unique: true,
-          using: 'BTREE',
-          fields: [
-            { name: 'id' }
-          ]
-        }
-      ]
-    }
+    sequelize,
+    tableName: 'customer_activation_tokens',
+    timestamps: true,
+    paranoid: true, // no borres datos
+    indexes: [
+      {
+        name: 'PRIMARY',
+        unique: true,
+        using: 'BTREE',
+        fields: [
+          { name: 'id' }
+        ]
+      }
+    ]
+  }
   )
 
   Model.associate = function (models) {

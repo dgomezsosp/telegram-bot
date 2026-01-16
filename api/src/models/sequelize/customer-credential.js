@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-  const Model = sequelize.define('UserCredential',
+  const Model = sequelize.define('CustomerCredential',
     { // definicion de los campos del modelo
       id: {
         type: DataTypes.INTEGER,
@@ -7,15 +7,15 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
         allowNull: false
       },
-      CustomerId: {
+      customerId: {  // ← CAMBIO: ahora con c minúscula
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
           notNull: {
-            msg: 'Por favor, rellena el campo "CustomerId".'
+            msg: 'Por favor, rellena el campo "customerId".'
           },
           notEmpty: {
-            msg: 'Por favor, rellena el campo "CustomerId".'
+            msg: 'Por favor, rellena el campo "customerId".'
           }
         }
       },
@@ -54,7 +54,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       createdAt: {
         type: DataTypes.DATE,
-        get () {
+        get() {
           return this.getDataValue('createdAt')
             ? this.getDataValue('createdAt').toISOString().split('T')[0]
             : null
@@ -62,28 +62,28 @@ module.exports = function (sequelize, DataTypes) {
       },
       updatedAt: {
         type: DataTypes.DATE,
-        get () {
+        get() {
           return this.getDataValue('updatedAt')
             ? this.getDataValue('updatedAt').toISOString().split('T')[0]
             : null
         }
       }
     }, { // opciones del modelo
-      sequelize,
-      tableName: 'customer_credentials',
-      timestamps: true,
-      paranoid: true, // no borres datos
-      indexes: [
-        {
-          name: 'PRIMARY',
-          unique: true,
-          using: 'BTREE',
-          fields: [
-            { name: 'id' }
-          ]
-        }
-      ]
-    }
+    sequelize,
+    tableName: 'customer_credentials',
+    timestamps: true,
+    paranoid: true, // no borres datos
+    indexes: [
+      {
+        name: 'PRIMARY',
+        unique: true,
+        using: 'BTREE',
+        fields: [
+          { name: 'id' }
+        ]
+      }
+    ]
+  }
   )
 
   Model.associate = function (models) {

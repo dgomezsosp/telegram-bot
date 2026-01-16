@@ -27,6 +27,7 @@ class PageComponent extends HTMLElement {
 
   async getTemplate(path) {
     const routes = {
+      '/admin': 'admin-dashboard.html',
       '/admin/usuarios': 'users.html',
       '/admin/eventos': 'events.html',
       '/admin/categorias-de-eventos': 'event-categories.html',

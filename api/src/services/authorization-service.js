@@ -7,13 +7,15 @@ const entities = {
     model: sequelizeDb.User,
     tokenModel: sequelizeDb.UserActivationToken,
     resetPasswordTokenModel: sequelizeDb.UserResetPasswordToken,
-    credentialModel: sequelizeDb.UserCredential
+    credentialModel: sequelizeDb.UserCredential,
+    idField: 'userId'
   },
   customer: {
     model: sequelizeDb.Customer,
     tokenModel: sequelizeDb.CustomerActivationToken,
     resetPasswordTokenModel: sequelizeDb.CustomerResetPasswordToken,
-    credentialModel: sequelizeDb.CustomerCredential
+    credentialModel: sequelizeDb.CustomerCredential,
+    idField: 'customerId'
   }
 }
 
@@ -26,13 +28,14 @@ module.exports = class AuthorizationService {
     const expirationDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
 
     await entity.tokenModel.create({
-      [`${type}Id`]: id,
+      [entity.idField]: id,
       token,
       expirationDate,
       used: false
     })
 
-    const url = `${process.env.API_URL}/cuenta/activacion?token=${token}`
+    // IMPORTANTE: Agregar el parámetro type a la URL
+    const url = `${process.env.API_URL}/cuenta/activacion?token=${token}&type=${type}`
 
     return url
   }
@@ -68,13 +71,13 @@ module.exports = class AuthorizationService {
     const expirationDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
 
     await entity.resetPasswordTokenModel.create({
-      [`${type}Id`]: id,
+      [entity.idField]: id,
       token,
       expirationDate,
       used: false
     })
 
-    const url = `${process.env.API_URL}/cuenta/reset?token=${token}`
+    const url = `${process.env.API_URL}/cuenta/reset?token=${token}&type=${type}`
     console.log(url)
     return url
   }
@@ -108,7 +111,7 @@ module.exports = class AuthorizationService {
     const userEntity = await entity.model.findOne({ where: { id } })
 
     const credentials = {
-      [`${type}Id`]: userEntity.id,
+      [entity.idField]: userEntity.id,
       email: userEntity.email,
       password: bcrypt.hashSync(password, 8),
       lastPasswordChange: new Date()
@@ -129,7 +132,7 @@ module.exports = class AuthorizationService {
 
     await entity.credentialModel.update(credentials, {
       where: {
-        [`${type}Id`]: userEntity.id
+        [entity.idField]: userEntity.id
       }
     })
   }

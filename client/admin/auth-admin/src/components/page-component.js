@@ -24,6 +24,7 @@ class PageComponent extends HTMLElement {
     console.log('Path actual:', path)
     const routes = {
       '/admin/login': 'login.html',
+      '/admin': 'admin-dashboard.html',
     }
 
     const filename = routes[path] || '404.html'

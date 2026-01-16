@@ -1,3 +1,4 @@
+// API: api/src/events/new-customer.js
 const AuthorizationService = require('../services/authorization-service')
 const EmailService = require('../services/email-service')
 
@@ -7,13 +8,14 @@ exports.handleEvent = async (redisClient, subscriberClient) => {
       const data = JSON.parse(message)
 
       const authorizationService = new AuthorizationService()
-      const activationUrl = await authorizationService.createActivationToken(data.id, 'user')
+      // CORRECCIÓN: Usar 'activationUrl' consistente con el template
+      const activationUrl = await authorizationService.createActivationToken(data.id, 'customer')
 
       const emailService = new EmailService('gmail')
       await emailService.sendEmail(
         data,
-        'user',
-        'activationUrl',
+        'customer',
+        'activationCustomer',  // Nombre del template
         { name: data.name, activationUrl }
       )
     } catch (error) {

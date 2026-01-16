@@ -4,6 +4,7 @@ class CustomerDashboardComponent extends HTMLElement {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
     this.customerData = null
+    this.apiUrl = import.meta.env.VITE_API_URL || window.location.origin
   }
 
   async connectedCallback() {
@@ -14,7 +15,7 @@ class CustomerDashboardComponent extends HTMLElement {
 
   async checkAuth() {
     try {
-      const result = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/customer/check-signin`, {
+      const result = await fetch(`${this.apiUrl}/api/auth/customer/check-signin`, {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
@@ -32,7 +33,7 @@ class CustomerDashboardComponent extends HTMLElement {
 
   async loadCustomerData() {
     try {
-      const result = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/customer/current`, {
+      const result = await fetch(`${this.apiUrl}/api/auth/customer/current`, {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
@@ -44,6 +45,32 @@ class CustomerDashboardComponent extends HTMLElement {
       }
     } catch (error) {
       console.error('Error cargando datos del customer:', error)
+    }
+  }
+
+  async handleLogout() {
+    try {
+      // Llamar al endpoint de logout para destruir la sesión
+      const result = await fetch(`${this.apiUrl}/api/auth/customer/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (result.ok) {
+        // Redirigir al login después de cerrar sesión exitosamente
+        window.location.href = '/login-customer'
+      } else {
+        console.error('Error al cerrar sesión')
+        // Aun así redirigir (por si acaso)
+        window.location.href = '/login-customer'
+      }
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error)
+      // Aun así redirigir (por si acaso)
+      window.location.href = '/login-customer'
     }
   }
 
@@ -165,6 +192,11 @@ class CustomerDashboardComponent extends HTMLElement {
         transform: scale(0.98);
       }
 
+      .logout-button:disabled{
+        background-color: hsl(0, 0%, 70%);
+        cursor: not-allowed;
+      }
+
     </style>
 
     <div class="dashboard-container">
@@ -197,12 +229,14 @@ class CustomerDashboardComponent extends HTMLElement {
     
     `
 
-    this.shadow.querySelector('.logout-button').addEventListener('click', async () => {
-      try {
-        window.location.href = '/login-customer'
-      } catch (error) {
-        console.error('Error al cerrar sesión:', error)
-      }
+    // NUEVO: Manejar el logout correctamente
+    const logoutButton = this.shadow.querySelector('.logout-button')
+    logoutButton.addEventListener('click', async () => {
+      // Deshabilitar el botón mientras se procesa
+      logoutButton.disabled = true
+      logoutButton.textContent = 'Cerrando sesión...'
+
+      await this.handleLogout()
     })
   }
 }

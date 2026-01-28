@@ -8,4 +8,23 @@
     style="background-color: #007bff; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
     Activar cuenta
   </a>
+
+  <div
+    style="margin-top: 2rem; padding: 1.5rem; background-color: #f8f9fa; border-radius: 8px; border: 2px solid #007bff;">
+    <h2 style="color: #007bff; margin-bottom: 1rem;">🤖 Código para Bot de Telegram</h2>
+    <p style="color: #666; font-size: 1rem; margin-bottom: 1rem;">
+      Para usar nuestro bot de Telegram, necesitarás este código de verificación:
+    </p>
+    <div style="background-color: #fff; padding: 1rem; border-radius: 5px; border: 2px dashed #007bff;">
+      <span style="font-size: 2rem; font-weight: bold; color: #007bff; letter-spacing: 5px;">
+        <%= data.verificationCode %>
+      </span>
+    </div>
+    <p style="color: #666; font-size: 0.9rem; margin-top: 1rem;">
+      Una vez en el bot, usa el comando: <br>
+      <code style="background-color: #e9ecef; padding: 5px 10px; border-radius: 3px; font-family: monospace;">
+        /login <%= data.email %>:<%= data.verificationCode %>
+      </code>
+    </p>
+  </div>
 </div>
